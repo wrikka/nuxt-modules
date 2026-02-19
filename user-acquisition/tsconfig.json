@@ -1,0 +1,36 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"target": "ESNext",
+		"downlevelIteration": true,
+		"types": [
+			"node",
+			"@nuxt/kit"
+		],
+		"lib": [
+			"ESNext",
+			"DOM"
+		],
+		"baseUrl": ".",
+		"paths": {
+			"#user-acquisition/types": [
+				"./src/types"
+			],
+			"#user-acquisition/*": [
+				"./src/*"
+			],
+			"#app": [
+				"./node_modules/nuxt/dist/app"
+			],
+			"#app/*": [
+				"./node_modules/nuxt/dist/app/*"
+			]
+		}
+	}
+}

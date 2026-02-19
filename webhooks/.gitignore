@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.nuxt
+.output
+
+# IDE
+.vscode
+.idea
+
+# Test
+coverage
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.*

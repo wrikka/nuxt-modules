@@ -1,0 +1,12 @@
+{
+  "name": "stripe-basic-example",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "nuxt": "^4.3.1"
+  }
+}

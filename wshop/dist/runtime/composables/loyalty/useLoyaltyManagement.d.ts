@@ -1,0 +1,31 @@
+import type { LoyaltyMember } from "#shared/types";
+export declare const useLoyaltyManagement: () => {
+    members: any;
+    loyaltyTiers: any;
+    programStats: any;
+    loading: any;
+    processing: any;
+    searchQuery: any;
+    filterTier: any;
+    filterStatus: any;
+    showMemberForm: any;
+    showPointsForm: any;
+    editingMember: any;
+    selectedMember: any;
+    filteredMembers: any;
+    getTierBadgeClass: any;
+    getTierName: any;
+    getStatusClass: any;
+    getStatusText: any;
+    loadMembers: () => Promise<void>;
+    loadLoyaltyTiers: () => Promise<void>;
+    openAddMemberForm: () => void;
+    openEditMemberForm: (member: LoyaltyMember) => void;
+    openAdjustPointsForm: (member: LoyaltyMember) => void;
+    viewMember: (member: LoyaltyMember) => void;
+    suspendMember: (member: LoyaltyMember) => Promise<void>;
+    deleteMember: (member: LoyaltyMember) => Promise<void>;
+    saveMember: (memberData: Partial<LoyaltyMember>) => Promise<void>;
+    savePointsAdjustment: (adjustment: any) => Promise<void>;
+};
+//# sourceMappingURL=useLoyaltyManagement.d.ts.map

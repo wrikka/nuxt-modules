@@ -1,0 +1,61 @@
+{
+	"name": "@wrikka/waccount",
+	"version": "0.0.1",
+	"description": "WAccount authentication module for Nuxt",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/module.d.ts",
+			"import": "./dist/module.mjs",
+			"require": "./dist/module.cjs"
+		},
+		"./runtime": {
+			"import": "./src/runtime/index.ts",
+			"types": "./src/runtime/index.ts"
+		},
+		"./runtime/*": {
+			"import": "./src/runtime/*",
+			"types": "./src/runtime/*"
+		}
+	},
+	"main": "./dist/module.cjs",
+	"types": "./dist/module.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "nuxi dev playground",
+		"build": "nuxt-module-build",
+		"preview": "nuxi preview playground",
+		"format": "dprint fmt",
+		"lint": "vue-tsc --noEmit && oxlint --fix --type-aware",
+		"test": "vitest --run",
+		"test:coverage": "vitest run --coverage",
+		"test:ui": "vitest --ui",
+		"typecheck": "vue-tsc --noEmit",
+		"prepare": "nuxt-module-build --prepare",
+		"prepublishOnly": "npm run build"
+	},
+	"dependencies": {
+		"@nuxt/kit": "^4.3.1",
+		"@workos-inc/node": "^7.82.0",
+		"defu": "^6.1.4",
+		"drizzle-orm": "^0.45.1",
+		"h3": "1.15.4",
+		"lucia": "^3.2.2",
+		"pinia": "^3.0.4",
+		"vue": "^3.5.28",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@nuxt/module-builder": "^1.0.2",
+		"@nuxt/test-utils": "^3.23.0",
+		"oxlint": "^1.49.0",
+		"oxlint-tsgolint": "^0.10.1",
+		"vitest": "^4.0.18",
+		"vue-tsc": "^3.2.4"
+	},
+	"peerDependencies": {
+		"nuxt": "^4.2.2"
+	}
+}

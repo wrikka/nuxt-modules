@@ -1,0 +1,43 @@
+{
+  "name": "habbit",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "format": "dprint fmt",
+    "lint": "nuxt typecheck && oxlint --fix --type-aware",
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:reset": "bun run db:migrate"
+  },
+  "dependencies": {
+    "@nuxt/icon": "^2.2.1",
+    "@nuxtjs/color-mode": "^4.0.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@scalar/nuxt": "^0.5.81",
+    "@unocss/nuxt": "^66.6.0",
+    "@vue-macros/nuxt": "^3.1.2",
+    "@vueuse/nuxt": "^14.2.1",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
+    "nanoid": "^5.1.6",
+    "nuxt": "^4.3.1",
+    "nuxt-mcp-dev": "^0.3.2",
+    "pinia": "^3.0.4",
+    "unocss": "^66.6.0",
+    "vue": "^3.5.28"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260219.0",
+    "drizzle-kit": "^0.31.9",
+    "oxlint": "^1.49.0",
+    "oxlint-tsgolint": "^0.11.5",
+    "typescript": "^5.9.3",
+    "vite-plugin-checker": "^0.12.0",
+    "vue-tsc": "^3.2.4",
+    "wrangler": "^4.67.0"
+  }
+}

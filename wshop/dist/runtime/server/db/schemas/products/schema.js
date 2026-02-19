@@ -1,0 +1,11 @@
+import { createInsertSchema } from "drizzle-zod";
+import { productImages, products, tags } from "./core.js";
+import { digitalProductFiles, productsToTags } from "./digital.js";
+import { productOptions, productVariants } from "./variants.js";
+export const insertProductSchema = createInsertSchema(products);
+export const insertProductImageSchema = createInsertSchema(productImages);
+export const insertProductOptionSchema = createInsertSchema(productOptions);
+export const insertProductVariantSchema = createInsertSchema(productVariants);
+export const insertTagSchema = createInsertSchema(tags);
+export const insertProductsToTagsSchema = createInsertSchema(productsToTags);
+export const insertDigitalProductFileSchema = createInsertSchema(digitalProductFiles);

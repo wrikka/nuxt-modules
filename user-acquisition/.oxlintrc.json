@@ -1,0 +1,23 @@
+{
+	"deno": {
+		"enable": false
+	},
+	"javascript": {
+		"globals": [
+			"defineNuxtModule",
+			"addPlugin",
+			"addImportsDir",
+			"addComponentsDir",
+			"createResolver"
+		]
+	},
+	"typescript": {
+		"globals": [
+			"defineNuxtModule",
+			"addPlugin",
+			"addImportsDir",
+			"addComponentsDir",
+			"createResolver"
+		]
+	}
+}

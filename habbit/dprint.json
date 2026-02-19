@@ -1,0 +1,33 @@
+{
+  "includes": [
+    "**/*.{ts,tsx,js,jsx,vue,json,md}"
+  ],
+  "excludes": [
+    "node_modules",
+    "dist",
+    ".nuxt",
+    ".output",
+    "coverage",
+    "build",
+    "data"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.93.0.wasm",
+    "https://plugins.dprint.dev/json-0.19.3.wasm",
+    "https://plugins.dprint.dev/markdown-0.17.8.wasm"
+  ],
+  "typescript": {
+    "quoteStyle": "alwaysSingle",
+    "semiColons": "prefer",
+    "trailingCommas": "onlyMultiLine",
+    "singleBodyPosition": "maintain",
+    "arrowFunction.useParentheses": "prefer"
+  },
+  "json": {
+    "indentWidth": 2
+  },
+  "markdown": {
+    "lineWidth": 80
+  },
+  "lineWidth": 100
+}

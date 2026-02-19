@@ -1,0 +1,13 @@
+:root {
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
+  --color-accent: #3b82f6;
+  --color-background: #ffffff;
+  --color-text: #000000;
+  
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --spacing-container: max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  --spacing-section: py-12;
+}
