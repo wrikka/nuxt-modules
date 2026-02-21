@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "wwhiteboard-web",
   "private": true,
   "type": "module",
   "scripts": {
