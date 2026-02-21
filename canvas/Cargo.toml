@@ -1,0 +1,57 @@
+[features]
+default = []
+wee_alloc = ["dep:wee_alloc"]
+
+[package]
+name = "canvas-wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cfg-if = "1.0.4"
+pollster = "0.4.0"
+wgpu = { version = "0.19.1" }
+console_error_panic_hook = "0.1.7"
+wasm-bindgen = "0.2.106"
+wasm-bindgen-futures = "0.4.56"
+bytemuck = { version = "1.24.0", features = [ "derive" ] }
+thiserror = "2.0.17"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
+figment = { version = "0.10.19", features = ["env", "toml"] }
+serde = { version = "1.0.228", features = ["derive"] }
+image = "0.25.9"
+anyhow = "1.0.100"
+serde_json = "1.0.148"
+ultraviolet = "0.10.0"
+tobj = { version = "4.0.3", features = ["async"] }
+rapier3d = "0.31.0"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.56"
+
+[dependencies.wee_alloc]
+version = "0.4.5"
+optional = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_log = "1.0.0"
+web-sys = { version = "0.3.83", features = [
+    'Document',
+    'Window',
+    'Element',
+    'HtmlCanvasElement',
+  ]}
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = true
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
