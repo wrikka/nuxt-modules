@@ -1,0 +1,11 @@
+# .config/nextest.toml
+
+# Profile สำหรับการพัฒนาทั่วไป
+[profile.default]
+slow-timeout = { period = "60s", terminate-after = 2 }
+retries = 3
+
+# Profile สำหรับ CI/CD
+[profile.ci]
+slow-timeout = { period = "2m", terminate-after = 1 }
+retries = 1

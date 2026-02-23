@@ -1,0 +1,1 @@
+1. ทุก packages ต้องใช้ wdesign

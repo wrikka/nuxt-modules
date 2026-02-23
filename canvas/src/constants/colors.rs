@@ -1,0 +1,7 @@
+#[allow(dead_code)]
+pub const CLEAR_COLOR: wgpu::Color = wgpu::Color {
+    r: 0.1,
+    g: 0.2,
+    b: 0.3,
+    a: 1.0,
+};

@@ -1,0 +1,45 @@
+{
+	"name": "@wrikka/wdesign",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./components": "./src/runtime/components/index.ts",
+		"./lib": "./src/lib/index.ts"
+	},
+	"scripts": {
+		"format": "dprint fmt",
+		"lint": "oxlint --fix --type-aware",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"verify": "nuxt typecheck"
+	},
+	"files": [
+		"src",
+		"runtime"
+	],
+	"dependencies": {
+		"@nuxt/kit": "^4.3.1",
+		"@unocss/core": "^66.6.0",
+		"@vueuse/core": "^14.2.1",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"defu": "^6.1.4",
+		"tailwind-merge": "^2.6.0"
+	},
+	"devDependencies": {
+		"@types/node": "^25.3.0",
+		"@unocss/preset-icons": "^66.6.0",
+		"nuxt": "^4.3.1",
+		"typescript": "^5.9.3",
+		"unocss": "^66.6.0",
+		"vitest": "^4.0.18",
+		"vue": "^3.5.28",
+		"vue-tsc": "^3.2.4"
+	},
+	"peerDependencies": {
+		"@unocss/nuxt": "*",
+		"vue": "^3.0.0"
+	}
+}

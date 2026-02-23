@@ -1,0 +1,15 @@
+use tracing_subscriber::{EnvFilter, FmtSubscriber};
+
+#[allow(dead_code)]
+pub fn init_subscriber() {
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+
+    let subscriber = FmtSubscriber::builder().with_env_filter(filter).finish();
+
+    tracing::subscriber::set_global_default(subscriber).expect("Failed to set tracing subscriber");
+}
+
+#[allow(dead_code)]
+pub fn set_panic_hook() {
+    console_error_panic_hook::set_once();
+}

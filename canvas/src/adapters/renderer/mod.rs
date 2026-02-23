@@ -1,0 +1,19 @@
+pub(crate) mod buffers;
+#[cfg(target_arch = "wasm32")]
+pub mod client;
+pub(crate) mod pipeline;
+pub(crate) mod wgpu_setup;
+
+#[cfg(not(target_arch = "wasm32"))]
+#[path = "client_stub.rs"]
+pub mod client;
+pub(crate) mod font;
+pub(crate) mod frame_buffer;
+pub(crate) mod instance;
+pub(crate) mod post_process;
+pub mod renderable;
+pub mod scene;
+pub(crate) mod shapes;
+pub(crate) mod texture;
+pub(crate) mod uniforms;
+pub mod vertex;
