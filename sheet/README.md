@@ -1,3 +1,19 @@
-# Sheet Project
+# sheet
 
-This is a spreadsheet application built with Nuxt, UnoCSS, and Turborepo.
+Spreadsheet data management.
+
+## Installation
+
+```bash
+bun install
+```
+
+## Usage
+
+```bash
+bun run dev
+```
+
+## License
+
+MIT
