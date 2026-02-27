@@ -33,3 +33,9 @@ Collection of Nuxt modules organized as monorepo for modern application developm
 | [wshop](./wshop/) | E-commerce platform |
 | [wslide](./wslide/) | Presentation and slide management |
 | [wwhiteboard](./wwhiteboard/) | Collaborative whiteboard |
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| [shared](./packages/shared/) | Shared configurations for UnoCSS, Vite, Vitest, TypeScript, Oxlint, Biome with React and Vue variants |

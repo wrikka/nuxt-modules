@@ -121,11 +121,7 @@ playwright/.cache/
 # Vitest
 coverage/
 
-# Biome
-biome.jsonc
 
-# Oxlint
-.oxlintrc.json
 
 # Knip
 knip.json

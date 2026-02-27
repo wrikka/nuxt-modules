@@ -1,0 +1,6 @@
+[submodule "docs-wrikka-com"]
+	path = docs-wrikka-com
+	url = https://github.com/wrikka/docs-wrikka-com
+[submodule "wcomposables"]
+	path = wcomposables
+	url = https://github.com/wrikka/wcomposables
