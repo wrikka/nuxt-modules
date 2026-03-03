@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "watch": "turbo watch verify",
-    "prepare": "bunx lefthook install && bunx taze -r -w -i",
+    "prepare": "bunx lefthook install && ",
     "dev": "nuxt dev",
     "format": "turbo format",
     "scan": "bunx sg scan -r",
