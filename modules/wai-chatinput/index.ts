@@ -52,7 +52,30 @@ export default defineNuxtModule<ModuleOptions>({
       { name: 'useCommands', from: resolve('../shared/composables/useCommands') },
       { name: 'useFileAttachments', from: resolve('../shared/composables/useFileAttachments') },
       { name: 'useFileUpload', from: resolve('../shared/composables/useFileUpload') },
-      { name: 'useChatInput', from: resolve('../shared/composables/useChatInput') }
+      { name: 'useChatInput', from: resolve('../shared/composables/useChatInput') },
+      // Feature composables
+      { name: 'useChatSearch', from: resolve('../shared/composables/useChatSearch') },
+      { name: 'useMessageThreading', from: resolve('../shared/composables/useMessageThreading') },
+      { name: 'useCodeExecution', from: resolve('../shared/composables/useCodeExecution') },
+      { name: 'useChatExport', from: resolve('../shared/composables/useChatExport') },
+      { name: 'useCollaboration', from: resolve('../shared/composables/useCollaboration') },
+      { name: 'useMessageBookmarks', from: resolve('../shared/composables/useMessageBookmarks') },
+      { name: 'useMessageReactions', from: resolve('../shared/composables/useMessageReactions') },
+      { name: 'useReadReceipts', from: resolve('../shared/composables/useReadReceipts') },
+      { name: 'useMessageScheduling', from: resolve('../shared/composables/useMessageScheduling') },
+      { name: 'useCustomTheme', from: resolve('../shared/composables/useCustomTheme') },
+      { name: 'useKeyboardShortcuts', from: resolve('../shared/composables/useKeyboardShortcuts') },
+      { name: 'useMessageTranslation', from: resolve('../shared/composables/useMessageTranslation') },
+      { name: 'usePinnedMessages', from: resolve('../shared/composables/usePinnedMessages') },
+      { name: 'useMessageHistory', from: resolve('../shared/composables/useMessageHistory') },
+      { name: 'useCustomSlashCommands', from: resolve('../shared/composables/useCustomSlashCommands') },
+      { name: 'useVoiceMessage', from: resolve('../shared/composables/useVoiceMessage') },
+      { name: 'useMessageAnalytics', from: resolve('../shared/composables/useMessageAnalytics') },
+      { name: 'useSmartSuggestions', from: resolve('../shared/composables/useSmartSuggestions') },
+      { name: 'useFocusMode', from: resolve('../shared/composables/useFocusMode') },
+      { name: 'useMessageForwarding', from: resolve('../shared/composables/useMessageForwarding') },
+      { name: 'useOfflineMode', from: resolve('../shared/composables/useOfflineMode') },
+      { name: 'usePlugins', from: resolve('../shared/composables/usePlugins') }
     ])
 
     // Make options available to runtime
