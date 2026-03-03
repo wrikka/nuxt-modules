@@ -64,9 +64,6 @@ jspm_packages/
 # Nuxt.js build / generate output
 .nuxt
 
-# Gatsby files
-.cache/
-public
 
 # Storybook build outputs
 .out
@@ -123,11 +120,6 @@ coverage/
 
 
 
-# Knip
-knip.json
-
-# Dprint
-dprint.json
 
 # Bun
 .bun

@@ -7,18 +7,14 @@
    ```
    module-name/
    ├── docs/
-   ├── playground/
-   │   ├── app.vue
-   │   └── nuxt.config.ts
-   ├── src/
-   │   ├── runtime/
-   │   │   ├── components/
-   │   │   ├── composables/
-   │   │   ├── middleware/ (optional)
-   │   │   ├── plugins/
-   │   │   ├── store/ (optional)
-   │   │   ├── types/
-   │   │   └── utils/
+   │   ├app/
+   │   │   ├components/
+   │   │   ├composables/
+   │   │   ├middleware/ (optional)
+   │   │   ├plugins/
+   │   │   ├store/ (optional)
+   │   │   ├types/
+   │   │   └utils/
    │   └── index.ts
    ├── test/
    │   ├── e2e/
@@ -38,9 +34,16 @@
    "scripts": {
      "dev": "nuxt dev",
      "build": "nuxt-build-module",
-     "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
+     "lint": "nuxt typecheck",
      "release": "release-it",
      "test": "vitest",
      "postinstall": "nuxt prepare"
    }
    ```
+
+
+8. ทุก package.json ใน modules ต้องกำหนด 
+
+ "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  }
