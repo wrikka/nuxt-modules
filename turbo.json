@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "globalDependencies": ["bun.lock"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "lib/**", "index.ts", "module.ts", "package.json", "tsconfig.json"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {},
+    "format": {},
+    "test": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "prepare": {
+      "cache": false
+    }
+  }
+}
