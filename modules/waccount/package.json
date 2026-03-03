@@ -33,7 +33,7 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "typecheck": "vue-tsc --noEmit",
-    "prepare": "nuxt-module-build --prepare",
+    "prepare": "nuxt prepare",
     "prepublishOnly": "npm run build",
     "release": "release-it"
   },

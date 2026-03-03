@@ -1,89 +1,88 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
   modelValue?: number
   max?: number
   size?: 'sm' | 'md' | 'lg'
   readonly?: boolean
-  disabled?: boolean
+  half?: boolean
+  clearable?: boolean
   class?: string
 }
 
 const _props = withDefaults(defineProps<Props>(), {
+  modelValue: 0,
   max: 5,
   size: 'md',
   readonly: false,
-  disabled: false
+  half: false,
+  clearable: false
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [rating: number]
-  hover: [rating: number]
+  'update:modelValue': [value: number]
+  'change': [value: number]
 }>()
 
-const hoverValue = ref(0)
+const _sizeClasses = computed(() => ({
+  sm: 'h-4 w-4',
+  md: 'h-5 w-5',
+  lg: 'h-6 w-6'
+}))
 
-const _sizeClasses = computed(() => {
-  const sizes = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6'
-  }
-  return sizes[_props.size]
-})
+const _hoverValue = ref(0)
 
-const _displayValue = computed(() => {
-  return hoverValue.value || _props.modelValue || 0
-})
+import { ref } from 'vue'
 
-const _onRatingChange = (rating: number) => {
-  if (!_props.readonly && !_props.disabled) {
-    emit('update:modelValue', rating)
+const _displayValue = computed(() => 
+  _hoverValue.value || _props.modelValue
+)
+
+const _setValue = (value: number) => {
+  if (_props.readonly) return
+  
+  const newValue = _props.clearable && _props.modelValue === value ? 0 : value
+  emit('update:modelValue', newValue)
+  emit('change', newValue)
+  _hoverValue.value = 0
+}
+
+const _onMouseEnter = (index: number) => {
+  if (!_props.readonly) {
+    _hoverValue.value = index + 1
   }
 }
 
-const _onHover = (rating: number) => {
-  if (!_props.readonly && !_props.disabled) {
-    hoverValue.value = rating
-    emit('hover', rating)
-  }
+const _onMouseLeave = () => {
+  _hoverValue.value = 0
 }
-
-const _onLeave = () => {
-  hoverValue.value = 0
-}
-
-const _classes = computed(() => [
-  'flex items-center space-x-1',
-  _props.disabled && 'opacity-50 cursor-not-allowed',
-  !_props.readonly && !_props.disabled && 'cursor-pointer',
-  _props.class
-])
 </script>
 
 <template>
   <div
-    :class="_classes"
-    @mouseleave="_onLeave"
+    :class="['inline-flex items-center gap-1', _props.class]"
+    @mouseleave="_onMouseLeave"
   >
     <button
-      v-for="star in _props.max"
-      :key="star"
+      v-for="index in max"
+      :key="index"
       type="button"
-      :disabled="_props.disabled"
-      class="p-0.5 transition-colors"
-      @click="_onRatingChange(star)"
-      @mouseenter="_onHover(star)"
+      :disabled="readonly"
+      :class="[
+        'transition-colors focus:outline-none',
+        readonly && 'cursor-default',
+        !readonly && 'cursor-pointer hover:scale-110'
+      ]"
+      @click="_setValue(index)"
+      @mouseenter="_onMouseEnter(index - 1)"
     >
-      <div
-        :class="[_sizeClasses, {
-          'text-yellow-400': star <= _displayValue,
-          'text-muted-foreground': star > _displayValue
-        }]"
-      >
-        <div class="i-lucide-star h-full w-full fill-current" />
-      </div>
+      <span
+        :class="[
+          index <= _displayValue ? 'i-lucide-star text-yellow-400 fill-yellow-400' : 'i-lucide-star text-muted-foreground',
+          _sizeClasses[size]
+        ]"
+      />
     </button>
   </div>
 </template>
