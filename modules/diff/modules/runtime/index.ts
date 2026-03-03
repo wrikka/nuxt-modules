@@ -11,7 +11,7 @@ export default defineNuxtModule({
 	},
 	meta: {
 		configKey: "diff",
-		name: "@wpackages/diff",
+		name: "@wrikka/diff",
 	},
 	setup(_options, nuxt) {
 		const resolver = createResolver(import.meta.url);

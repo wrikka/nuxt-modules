@@ -9,8 +9,8 @@
 		"vue": "^3.5.29"
 	},
 	"exports": {
-		".": "./modules/src/runtime/utils/index.js",
-		"./*": "./modules/src/runtime/utils/*"
+		".": "./modules/module.ts",
+		"./runtime/*": "./modules/runtime/*"
 	},
 	"files": [
 		"dist",
