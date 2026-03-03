@@ -1,0 +1,16 @@
+{
+	"name": "@wpackages/diff-docs",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Documentation for @wpackages/diff",
+	"type": "module",
+	"scripts": {
+		"dev": "vitepress dev",
+		"build": "vitepress build",
+		"preview": "vitepress preview"
+	},
+	"devDependencies": {
+		"vitepress": "^1.6.4"
+	},
+	"packageManager": "bun@1.3.10"
+}

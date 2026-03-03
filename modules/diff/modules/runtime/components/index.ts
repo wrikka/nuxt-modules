@@ -1,0 +1,5 @@
+export { default as DiffSection } from './DiffSection.vue'
+export { default as DiffSummary } from './DiffSummary.vue'
+export { default as FileDiff } from './FileDiff.vue'
+export { default as SideBySideDiff } from './SideBySideDiff.vue'
+export { default as UnifiedDiff } from './UnifiedDiff.vue'

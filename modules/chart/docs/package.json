@@ -1,0 +1,22 @@
+{
+  "name": "@wpackages/chart-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "dependencies": {
+    "@unocss/preset-icons": "^66.6.4",
+    "@unocss/preset-wind": "^66.6.4",
+    "@wpackages/chart": "workspace:*",
+    "unocss": "^66.6.4",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

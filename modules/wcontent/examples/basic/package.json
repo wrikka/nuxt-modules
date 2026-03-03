@@ -1,0 +1,15 @@
+{
+  "name": "content-basic-example",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "preview": "nuxt preview",
+    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "release": "release-it",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "nuxt": "^4.3.1"
+  }
+}

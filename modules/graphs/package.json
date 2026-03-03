@@ -1,0 +1,50 @@
+{
+	"name": "@wrikka/graphs",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Nuxt graph algorithms and visualization module",
+	"type": "module",
+	"keywords": [
+		"nuxt",
+		"graphs",
+		"algorithms",
+		"visualization",
+		"typescript",
+		"vue"
+	],
+	"main": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": "./dist/index.mjs",
+		"./nuxt": "./dist/module.mjs",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"dev": "nuxt dev",
+		"build": "nuxt-build-module",
+		"lint": "nuxt typecheck && oxlint --type-aware --fix",
+		"release": "release-it",
+		"test": "vitest",
+		"postinstall": "nuxt prepare"
+	},
+	"dependencies": {
+		"nuxt": "^3.0.0",
+		"vue": "^3.0.0"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"oxlint": "^1.50.0",
+		"tsdown": "^0.18.4",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.18",
+		"@nuxt/devtools": "latest",
+		"@nuxt/kit": "latest",
+		"vitepress": "^1.0.0",
+		"@types/node": "^20.0.0"
+	},
+	"module": "./dist/module.mjs"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@wrikka/wquality-checker",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
+    "format": "biome format --write",
+    "build": "nuxt-build-module",
+    "dev": "nuxt dev",
+    "release": "release-it",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@ast-grep/napi": "latest",
+    "@nuxt/kit": "latest",
+    "@types/node": "^25.3.3",
+    "@unocss/core": "^66.6.4",
+    "@vueuse/core": "latest",
+    "biome": "latest",
+    "nuxt": "^4.3.1",
+    "oxlint": "latest",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vue": "^3.5.29"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "wcanvas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./pkg/canvas.js",
+  "types": "./pkg/canvas.d.ts",
+  "exports": {
+    ".": {
+      "types": "./pkg/canvas.d.ts",
+      "default": "./pkg/canvas.js"
+    }
+  },
+  "files": [
+    "pkg"
+  ],
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "check": "cargo check",
+    "format": "cargo fmt --all",
+    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "test": "vitest",
+    "test:nextest": "cargo nextest run --all-features --verbose",
+    "build": "nuxt-build-module",
+    "build:wasm": "bun ./scripts/run-wasm-pack.mjs build . --release --target web --out-dir pkg",
+    "audit": "cargo audit",
+    "deny": "cargo deny check",
+    "verify": "bun run format -- --check && bun run lint && bun run test:nextest && cargo audit && cargo deny check",
+    "verify:ci": "bun run format -- --check && bun run lint && bun run test:nextest --ci && cargo audit && cargo deny check",
+    "release": "release-it"
+  }
+}

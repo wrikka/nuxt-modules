@@ -1,0 +1,21 @@
+{
+	"name": "Default",
+	"description": "Clean and modern design",
+	"customizable": {
+		"colors": {
+			"primary": "#000000",
+			"secondary": "#ffffff",
+			"accent": "#3b82f6",
+			"background": "#ffffff",
+			"text": "#000000"
+		},
+		"fonts": {
+			"heading": "Inter",
+			"body": "Inter"
+		},
+		"spacing": {
+			"container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+			"section": "py-12"
+		}
+	}
+}

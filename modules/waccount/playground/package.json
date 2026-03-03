@@ -1,0 +1,23 @@
+{
+  "name": "waccount-playground",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "generate": "nuxi generate",
+    "preview": "nuxi preview",
+    "postinstall": "nuxi prepare",
+    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "release": "release-it",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@wrikka/waccount": "file:..",
+    "nuxt": "^4.3.1"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest"
+  }
+}
