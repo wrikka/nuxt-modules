@@ -20,7 +20,7 @@ export default defineNuxtModule({
     },
     meta: {
         configKey: "diff",
-        name: "@wpackages/diff",
+        name: "@wrikka/diff",
         version: "0.1.0",
         compatibility: {
             nuxt: '^4.3.1'

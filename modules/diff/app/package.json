@@ -14,7 +14,7 @@
 	"version": "0.1.0",
 	"dependencies": {
 		"@pinia/nuxt": "^0.11.3",
-		"@wrikka/diff-modules": "file:../",
+		"@wrikka/diff": "file:../",
 		"nuxt": "^4.3.1",
 		"pinia": "^3.0.4",
 		"vue": "^3.5.29"
