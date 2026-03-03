@@ -1,6 +1,0 @@
-{
-	"$schema": "https://unpkg.com/knip@5/schema.json",
-	"entry": ["src/module.ts", "src/runtime/**/*.ts"],
-	"ignore": ["dist/**"],
-	"ignoreDependencies": ["nuxt", "vue"]
-}
