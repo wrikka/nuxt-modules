@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@wrikka/wui": ["../wui/src/index.ts"],
+      "@wrikka/wcomposables": ["../../wcomposables/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*", "playground/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

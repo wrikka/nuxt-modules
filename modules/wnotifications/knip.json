@@ -1,0 +1,17 @@
+{
+  "entry": ["src/index.ts"],
+  "project": ["src/**/*.ts"],
+  "ignore": [
+    "test/**",
+    "dist/**",
+    ".nuxt/**",
+    ".output/**",
+    "node_modules/**"
+  ],
+  "ignoreDependencies": [
+    "@nuxt/kit",
+    "@nuxt/module-builder",
+    "vitest",
+    "@vue/test-utils"
+  ]
+}

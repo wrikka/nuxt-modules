@@ -91,8 +91,7 @@ npm run format
 
 The project uses:
 - **TypeScript** for type safety
-- **oxlint** for fast JavaScript/TypeScript linting
-- **Biome** for code formatting and additional linting
+- **dprint** for code formatting
 
 ## Coding Standards
 
@@ -125,7 +124,7 @@ Use conventional commit format:
 feat: add new chart type
 fix: resolve tooltip positioning bug
 docs: update API documentation
-style: format code with biome
+style: format code with dprint
 refactor: simplify data processing logic
 test: add unit tests for new component
 ```

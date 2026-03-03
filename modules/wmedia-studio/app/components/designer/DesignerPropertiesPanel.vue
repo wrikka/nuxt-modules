@@ -32,6 +32,7 @@ import type { Transform3D } from "./Transform3DPanel.vue";
 import VersionHistory from "./VersionHistory.vue";
 
 import type { DesignerSelectedObject } from "#shared/types/element";
+import { useDesignerProperties } from "~/composables/useDesignerProperties";
 
 interface Props {
 	selected: DesignerSelectedObject | null;
@@ -40,26 +41,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
 	selected: null,
 });
-
-// Type definitions for model states
-interface ShadowModel {
-	enabled: boolean;
-	color: string;
-	blur: number;
-	offsetX: number;
-	offsetY: number;
-}
-
-interface StrokeModel {
-	dashArray: number[] | null;
-	lineCap: "butt" | "round" | "square";
-	cornerRadius: number;
-}
-
-interface BlendModel {
-	opacity: number;
-	blendMode: string;
-}
 
 const emit = defineEmits<{
 	update: [property: string, value: unknown];
@@ -101,10 +82,7 @@ const asNumber = (v: string | number): number => {
 	return Number.isFinite(n) ? n : 0;
 };
 
-const emitUpdate = (
-	property: keyof DesignerSelectedObject,
-	value: DesignerSelectedObject[keyof DesignerSelectedObject],
-): void => {
+const emitUpdate = (property: keyof DesignerSelectedObject, value: DesignerSelectedObject[keyof DesignerSelectedObject]): void => {
 	emit("update", property as string, value);
 };
 
@@ -113,285 +91,51 @@ const selectedHeight = computed(() => props.selected?.height ?? 100);
 
 const isTextObject = computed(() => props.selected?.objectType === "textbox");
 const isImageObject = computed(() => props.selected?.objectType === "image");
-const colorModel = ref("#3B82F6");
 
-const gradientModel = ref({
-	type: "linear" as "linear" | "radial",
-	angle: 90,
-	stops: [
-		{ position: 0, color: "#3B82F6" },
-		{ position: 100, color: "#8B5CF6" },
-	],
-});
-
-const shadowModel = ref<ShadowModel>({
-	enabled: false,
-	color: "rgba(0, 0, 0, 0.3)",
-	blur: 10,
-	offsetX: 0,
-	offsetY: 4,
-});
-
-// Sync shadow model with selected prop
-watch(() => props.selected?.shadow, (shadow) => {
-	shadowModel.value.enabled = !!shadow;
-}, { immediate: true });
-
-const strokeModel = ref<StrokeModel>({
-	dashArray: null,
-	lineCap: "butt",
-	cornerRadius: 0,
-});
-
-// Sync stroke model with selected prop
-watch(() => props.selected, (selected) => {
-	if (selected) {
-		strokeModel.value.dashArray = selected.strokeDashArray ?? null;
-		strokeModel.value.lineCap = selected.strokeLineCap ?? "butt";
-		strokeModel.value.cornerRadius = selected.rx ?? 0;
-	}
-}, { immediate: true, deep: true });
-
-const blendModel = ref<BlendModel>({
-	opacity: 100,
-	blendMode: "normal",
-});
-
-// Sync blend model with selected prop
-watch(() => props.selected, (selected) => {
-	if (selected) {
-		blendModel.value.opacity = selected.opacity ?? 100;
-		blendModel.value.blendMode = selected.blendMode || "normal";
-	}
-}, { immediate: true, deep: true });
-
-const DEFAULT_IMAGE_FILTERS: Required<DesignerSelectedObject>["imageFilters"] =
-	{
-		blur: 0,
-		brightness: 100,
-		contrast: 100,
-		saturation: 100,
-		hueRotate: 0,
-		sepia: 0,
-		grayscale: 0,
-		invert: 0,
-	};
-
-const imageFiltersModel = ref<Required<DesignerSelectedObject>["imageFilters"]>(
-	{ ...DEFAULT_IMAGE_FILTERS },
-);
-
-// Sync image filters with selected prop
-watch(() => props.selected?.imageFilters, (filters) => {
-	imageFiltersModel.value = filters
-		? { ...DEFAULT_IMAGE_FILTERS, ...filters }
-		: { ...DEFAULT_IMAGE_FILTERS };
-}, { immediate: true, deep: true });
-
-const cropModel = ref({
-	enabled: false,
-	x: 0,
-	y: 0,
-	width: 100,
-	height: 100,
-	aspectRatio: null as number | null,
-});
-
-const rotationModel = ref<{ angle: number }>({ angle: 0 });
-
-// Sync rotation model with selected prop
-watch(() => props.selected?.angle, (angle) => {
-	rotationModel.value.angle = angle || 0;
-}, { immediate: true });
-
-const smartGuidesModel = ref({
-	enabled: true,
-	snapToObjects: true,
-	snapToGuides: true,
-	snapToGrid: false,
-	showDistances: true,
-});
-
-const spacingModel = ref<SpacingMeasurement[]>([]);
-
-const artboardPresetsModel = ref({
-	selectedCategory: "social",
-});
-
-const patternModel = ref<{
-	selectedPattern: string | null;
-	color: string;
-	opacity: number;
-	size: number;
-}>({
-	selectedPattern: "none",
-	color: "#3B82F6",
-	opacity: 10,
-	size: 20,
-});
-
-const lottieModel = ref<LottieAnimation | null>(null);
-
-const qrCodeModel = ref<QRCodeConfig>({
-	data: "https://example.com",
-	size: 200,
-	color: "#000000",
-	backgroundColor: "#FFFFFF",
-	errorCorrection: "M",
-});
-
-const chartModel = ref<ChartConfig>({
-	type: "bar",
-	width: 600,
-	height: 400,
-	title: "Chart Title",
-	showLegend: true,
-	showGrid: true,
-	data: {
-		labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-		datasets: [],
-	},
-});
-
-const transform3DModel = ref<Transform3D>({
-	rotateX: 0,
-	rotateY: 0,
-	rotateZ: 0,
-	translateX: 0,
-	translateY: 0,
-	translateZ: 0,
-	scale: 1,
-	perspective: 1000,
-});
-
-const tokenCategories = ref<TokenCategory[]>([
-	{
-		id: "colors",
-		name: "Colors",
-		tokens: [
-			{
-				id: "primary",
-				name: "Primary",
-				type: "color",
-				value: "#3B82F6",
-				category: "colors",
-			},
-			{
-				id: "secondary",
-				name: "Secondary",
-				type: "color",
-				value: "#8B5CF6",
-				category: "colors",
-			},
-			{
-				id: "success",
-				name: "Success",
-				type: "color",
-				value: "#10B981",
-				category: "colors",
-			},
-			{
-				id: "danger",
-				name: "Danger",
-				type: "color",
-				value: "#EF4444",
-				category: "colors",
-			},
-		],
-	},
-	{
-		id: "typography",
-		name: "Typography",
-		tokens: [
-			{
-				id: "heading-1",
-				name: "Heading 1",
-				type: "typography",
-				value: "2.25rem",
-				category: "typography",
-			},
-			{
-				id: "heading-2",
-				name: "Heading 2",
-				type: "typography",
-				value: "1.875rem",
-				category: "typography",
-			},
-			{
-				id: "body",
-				name: "Body",
-				type: "typography",
-				value: "1rem",
-				category: "typography",
-			},
-		],
-	},
-	{
-		id: "spacing",
-		name: "Spacing",
-		tokens: [
-			{
-				id: "xs",
-				name: "Extra Small",
-				type: "spacing",
-				value: 4,
-				category: "spacing",
-			},
-			{
-				id: "sm",
-				name: "Small",
-				type: "spacing",
-				value: 8,
-				category: "spacing",
-			},
-			{
-				id: "md",
-				name: "Medium",
-				type: "spacing",
-				value: 16,
-				category: "spacing",
-			},
-			{
-				id: "lg",
-				name: "Large",
-				type: "spacing",
-				value: 24,
-				category: "spacing",
-			},
-		],
-	},
-]);
-
-const selectedTokenId = ref<string | null>(null);
+// Use the extracted composable for all model states
+const {
+	colorModel,
+	gradientModel,
+	shadowModel,
+	strokeModel,
+	blendModel,
+	imageFiltersModel,
+	cropModel,
+	rotationModel,
+	smartGuidesModel,
+	spacingModel,
+	artboardPresetsModel,
+	patternModel,
+	lottieModel,
+	qrCodeModel,
+	chartModel,
+	transform3DModel,
+	tokenCategories,
+	selectedTokenId,
+	DEFAULT_IMAGE_FILTERS,
+} = useDesignerProperties(computed(() => props.selected));
 
 // Handlers
 const handleShadowChange = () => {
 	if (shadowModel.value.enabled) {
-		emitUpdate(
-			"shadow",
-			JSON.stringify({
-				color: shadowModel.value.color,
-				blur: shadowModel.value.blur,
-				offsetX: shadowModel.value.offsetX,
-				offsetY: shadowModel.value.offsetY,
-			}),
-		);
+		emitUpdate("shadow", JSON.stringify({
+			color: shadowModel.value.color,
+			blur: shadowModel.value.blur,
+			offsetX: shadowModel.value.offsetX,
+			offsetY: shadowModel.value.offsetY,
+		}));
 	} else {
 		emitUpdate("shadow", undefined);
 	}
 };
 
-const handleTextStyleSelect = (
-	style: { fontSize: number; fontWeight: string },
-) => {
+const handleTextStyleSelect = (style: { fontSize: number; fontWeight: string }) => {
 	emit("applyTextStyle", style);
 	emitUpdate("fontSize", style.fontSize);
 	emitUpdate("fontWeight", style.fontWeight);
 };
 
-const handleShapeSelect = (
-	shape: { id: string; name: string; category: string; svg: string },
-) => {
+const handleShapeSelect = (shape: { id: string; name: string; category: string; svg: string }) => {
 	emit("addShape", shape.id);
 };
 
@@ -413,10 +157,7 @@ const handleFlip = (direction: "horizontal" | "vertical") => {
 	emit("flip", direction);
 };
 
-const handleDistribute = (
-	direction: "horizontal" | "vertical",
-	method: string,
-) => {
+const handleDistribute = (direction: "horizontal" | "vertical", method: string) => {
 	emit("distribute", direction, method);
 };
 
@@ -443,6 +184,14 @@ const handleResolveComment = (commentId: string) => {
 const handleDeleteComment = (commentId: string) => {
 	emit("deleteComment", commentId);
 };
+
+// Token handlers (placeholders)
+const handleTokenCreate = (category: string) => console.log("Create token in", category);
+const handleTokenUpdate = (id: string, updates: unknown) => console.log("Update token", id, updates);
+const handleTokenDelete = (id: string) => console.log("Delete token", id);
+const handleTokenDuplicate = (id: string) => console.log("Duplicate token", id);
+const handleTokenImport = () => console.log("Import tokens");
+const handleTokenExport = () => console.log("Export tokens");
 </script>
 
 <template>

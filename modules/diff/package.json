@@ -1,37 +1,40 @@
 {
-	"description": "Nuxt diff utilities module",
-	"devDependencies": {
-		"@nuxt/kit": "^4.3.1",
-		"@types/bun": "1.3.9",
-		"tsdown": "^0.20.3",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.18",
-		"vue": "^3.5.29"
-	},
-	"exports": {
-		".": "./modules/module.ts",
-		"./runtime/*": "./modules/runtime/*"
-	},
-	"files": [
-		"dist",
-		"README.md"
-	],
-	"keywords": [
-		"nuxt",
-		"diff",
-		"utilities",
-		"typescript"
-	],
-	"name": "@wrikka/diff",
-	"packageManager": "bun@1.3.10",
-	"scripts": {
-		"dev": "nuxt dev",
-		"build": "nuxt-build-module",
-		"lint": "nuxt typecheck && oxlint --type-aware --fix",
-		"release": "release-it",
-		"test": "vitest",
-		"postinstall": "nuxt prepare"
-	},
-	"type": "module",
-	"version": "0.1.0"
-	}
+  "description": "Nuxt diff utilities module",
+  "devDependencies": {
+    "@nuxt/kit": "^4.3.1",
+    "@types/bun": "1.3.9",
+    "tsdown": "^0.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "vue": "^3.5.29"
+  },
+  "exports": {
+    ".": "./modules/module.ts",
+    "./runtime/*": "./modules/runtime/*"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "nuxt",
+    "diff",
+    "utilities",
+    "typescript"
+  ],
+  "name": "@wrikka/diff",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
+  "packageManager": "bun@1.3.10",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "lint": "nuxt typecheck",
+    "release": "release-it",
+    "test": "vitest",
+    "postinstall": "nuxt prepare"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

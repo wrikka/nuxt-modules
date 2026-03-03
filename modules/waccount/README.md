@@ -266,7 +266,7 @@ waccount/
 - **Styling**: UnoCSS
 - **Validation**: Zod
 - **Testing**: Vitest
-- **Linting**: oxlint, vue-tsc
+- **Linting**: vue-tsc for Vue components
 - **Formatting**: dprint
 - **Deployment**: Cloudflare Module
 
@@ -327,7 +327,7 @@ Reusable Nuxt module for authentication and dashboard layout. See [`packages/aut
 This project enforces strict code quality standards:
 
 - **Type Safety**: Strict TypeScript with type checking
-- **Linting**: oxlint for fast linting, vue-tsc for Vue components
+- **Linting**: vue-tsc for Vue components
 - **Formatting**: dprint for consistent code formatting
 - **Security Scanning**: ast-grep for security and best practices
 - **Git Hooks**: Lefthook for pre-commit checks

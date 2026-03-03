@@ -1,16 +1,4 @@
 {
-  "name": "wemail",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt-build-module",
-    "preview": "nuxt preview",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
-    "postinstall": "bunx taze -r -w -i && nuxt prepare",
-    "test": "vitest",
-    "release": "release-it"
-  },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/json": "^2.2.445",
@@ -33,5 +21,20 @@
     "nuxt-mcp-dev": "^0.3.2",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5"
-  }
+  },
+  "name": "wemail",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "preview": "nuxt preview",
+    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "release": "release-it"
+  },
+  "type": "module"
 }

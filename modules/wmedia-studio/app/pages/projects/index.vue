@@ -1,107 +1,72 @@
 <script setup lang="ts">
-import type { Folder, Project } from "#shared/types";
 import { format } from "date-fns";
+import {
+	useBulkSelection,
+	useKeyboardShortcuts,
+	useProjectFilters,
+	useProjects,
+} from "@wrikka/composables";
 
 const router = useRouter();
 
-// State
-const currentFolder = ref<string | null>(null);
-const loading = ref(true);
-const projects = ref<Project[]>([]);
-const folders = ref<Folder[]>([]);
-const viewMode = ref<"grid" | "list">("grid");
-const selectedProjects = ref<Set<string>>(new Set());
-const searchQuery = ref("");
-const sortBy = ref<"updated" | "created" | "name" | "size">("updated");
-const sortOrder = ref<"asc" | "desc">("desc");
-const showFavoritesOnly = ref(false);
-const showTrash = ref(false);
+// Projects management
+const {
+	projects,
+	folders,
+	loading,
+	allTags,
+	recentProjects,
+	createProject,
+	duplicateProject,
+	moveToTrash,
+	restoreFromTrash,
+	permanentDelete,
+	toggleFavorite,
+	addTag,
+	removeTag,
+	saveAsTemplate,
+} = useProjects();
 
-// Modals
-const previewProject = ref<Project | null>(null);
+// Filters and sorting
+const {
+	currentFolder,
+	searchQuery,
+	sortBy,
+	sortOrder,
+	viewMode,
+	showFavoritesOnly,
+	showTrash,
+	filteredProjects,
+	resultCount,
+	toggleSortOrder,
+	setFolder,
+	toggleTrash,
+} = useProjectFilters({ projects: projects.value });
+
+// Bulk selection
+const {
+	selectedIds: selectedProjects,
+	selectedCount,
+	isAllSelected,
+	hasSelection,
+	select: selectProject,
+	selectAll,
+	clearSelection,
+} = useBulkSelection({
+	items: filteredProjects,
+	getId: (p) => p.id,
+});
+
+// UI State
+const previewProject = ref(null);
 const shareProjectId = ref<string | null>(null);
 const duplicateProjectId = ref<string | null>(null);
-const tagManagerProject = ref<Project | null>(null);
+const tagManagerProject = ref(null);
 const showImportModal = ref(false);
 const showCommandPalette = ref(false);
 const showActivitySidebar = ref(false);
 
-// Recent projects (last 5 accessed)
-const recentProjects = computed(() => {
-	return [...projects.value]
-		.sort((a, b) =>
-			new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-		)
-		.slice(0, 5);
-});
-
-// Filtered and sorted projects
-const filteredProjects = computed(() => {
-	let result = projects.value;
-
-	// Trash filter
-	if (showTrash.value) {
-		result = result.filter(p => p.isDeleted);
-	} else {
-		result = result.filter(p => !p.isDeleted);
-	}
-
-	// Folder filter
-	if (currentFolder.value === null) {
-		result = result.filter(p => !p.folderId);
-	} else {
-		result = result.filter(p => p.folderId === currentFolder.value);
-	}
-
-	// Search filter
-	if (searchQuery.value) {
-		const query = searchQuery.value.toLowerCase();
-		result = result.filter(p =>
-			p.name.toLowerCase().includes(query)
-			|| p.description?.toLowerCase().includes(query)
-			|| p.tags?.some(tag => tag.toLowerCase().includes(query))
-		);
-	}
-
-	// Favorites filter
-	if (showFavoritesOnly.value) {
-		result = result.filter(p => p.isFavorite);
-	}
-
-	// Sort
-	result = [...result].sort((a, b) => {
-		let comparison = 0;
-		switch (sortBy.value) {
-			case "name":
-				comparison = a.name.localeCompare(b.name);
-				break;
-			case "created":
-				comparison = new Date(a.createdAt).getTime()
-					- new Date(b.createdAt).getTime();
-				break;
-			case "size":
-				comparison = (a.size || 0) - (b.size || 0);
-				break;
-			case "updated":
-			default:
-				comparison = new Date(a.updatedAt).getTime()
-					- new Date(b.updatedAt).getTime();
-				break;
-		}
-		return sortOrder.value === "desc" ? -comparison : comparison;
-	});
-
-	return result;
-});
-
-// All unique tags for suggestions
-const allTags = computed(() => {
-	const tags = new Set<string>();
-	projects.value.forEach(p => p.tags?.forEach(t => tags.add(t)));
-	return Array.from(tags);
-});
-
-// Activity feed data (mock)
+// Mock activities
 const activities = ref([
 	{
 		id: "1",
@@ -132,164 +97,45 @@ const activities = ref([
 	},
 ]);
 
-// Load data
-const loadProjects = async () => {
-	loading.value = true;
-	try {
-		const response = await $fetch<{ data: { projects: Project[] } }>(
-			"/api/projects",
-		);
-		projects.value = response.data.projects;
-	} catch (error) {
-		console.error("Failed to load projects:", error);
-	} finally {
-		loading.value = false;
-	}
-};
-
-const loadFolders = async () => {
-	try {
-		const response = await $fetch<{ data: { data: Folder[] } }>("/api/folders");
-		folders.value = response.data.data;
-	} catch (error) {
-		console.error("Failed to load folders:", error);
-	}
-};
-
 // Actions
-const createNewProject = async () => {
-	const { data } = await $fetch<{ data: { projectId: string } }>(
-		"/api/projects",
-		{
-			method: "POST",
-			body: {
-				name: "Untitled Project",
-				width: 1920,
-				height: 1080,
-			},
-		},
-	);
-	router.push(`/editor/${data.projectId}`);
-};
-
 const openProject = (projectId: string) => {
 	router.push(`/editor/${projectId}`);
 };
 
-const duplicateProject = async (projectId: string) => {
-	await $fetch(`/api/projects/${projectId}/duplicate`, { method: "POST" });
-	await loadProjects();
-};
-
-const moveToTrash = async (projectId: string) => {
-	if (!confirm("Are you sure you want to move this project to trash?")) return;
-	await $fetch(`/api/projects/${projectId}/trash`, { method: "POST" });
-	await loadProjects();
-};
-
-const restoreFromTrash = async (projectId: string) => {
-	await $fetch(`/api/projects/${projectId}/restore`, { method: "POST" });
-	await loadProjects();
-};
-
-const permanentDelete = async (projectId: string) => {
-	if (!confirm("This will permanently delete the project. Continue?")) return;
-	await $fetch(`/api/projects/${projectId}`, { method: "DELETE" });
-	await loadProjects();
-};
-
-const toggleFavorite = async (projectId: string, isFavorite: boolean) => {
-	await $fetch(`/api/projects/${projectId}/favorite`, {
-		method: "POST",
-		body: { isFavorite },
+const createNewProject = async () => {
+	const projectId = await createProject({
+		name: "Untitled Project",
+		width: 1920,
+		height: 1080,
 	});
-	const project = projects.value.find(p => p.id === projectId);
-	if (project) project.isFavorite = isFavorite;
-};
-
-const addTag = async (projectId: string, tag: string) => {
-	const project = projects.value.find(p => p.id === projectId);
-	if (!project) return;
-	const newTags = [...(project.tags || []), tag];
-	await $fetch(`/api/projects/${projectId}/tags`, {
-		method: "PUT",
-		body: { tags: newTags },
-	});
-	project.tags = newTags;
-};
-
-const removeTag = async (projectId: string, tag: string) => {
-	const project = projects.value.find(p => p.id === projectId);
-	if (!project) return;
-	const newTags = (project.tags || []).filter(t => t !== tag);
-	await $fetch(`/api/projects/${projectId}/tags`, {
-		method: "PUT",
-		body: { tags: newTags },
-	});
-	project.tags = newTags;
-};
-
-const saveAsTemplate = async (projectId: string) => {
-	await $fetch(`/api/projects/${projectId}/template`, { method: "POST" });
-	alert("Project saved as template!");
+	router.push(`/editor/${projectId}`);
 };
 
 // Bulk actions
-const selectProject = (projectId: string, selected: boolean) => {
-	if (selected) {
-		selectedProjects.value.add(projectId);
-	} else {
-		selectedProjects.value.delete(projectId);
-	}
-};
-
-const selectAll = () => {
-	if (selectedProjects.value.size === filteredProjects.value.length) {
-		selectedProjects.value.clear();
-	} else {
-		filteredProjects.value.forEach(p => selectedProjects.value.add(p.id));
-	}
-};
-
-const clearSelection = () => {
-	selectedProjects.value.clear();
-};
-
 const bulkDelete = async () => {
-	if (!confirm(`Move ${selectedProjects.value.size} projects to trash?`)) {
-		return;
-	}
+	if (!confirm(`Move ${selectedCount.value} projects to trash?`)) return;
 	for (const id of selectedProjects.value) {
-		await $fetch(`/api/projects/${id}/trash`, { method: "POST" });
+		await moveToTrash(id);
 	}
-	selectedProjects.value.clear();
-	await loadProjects();
+	clearSelection();
 };
 
 const bulkDuplicate = async () => {
 	for (const id of selectedProjects.value) {
-		await $fetch(`/api/projects/${id}/duplicate`, { method: "POST" });
+		await duplicateProject(id);
 	}
-	selectedProjects.value.clear();
-	await loadProjects();
+	clearSelection();
 };
 
 // Keyboard shortcuts
-const handleKeydown = (e: KeyboardEvent) => {
-	if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-		e.preventDefault();
-		showCommandPalette.value = true;
-	}
-};
-
-onMounted(() => {
-	loadProjects();
-	loadFolders();
-	window.addEventListener("keydown", handleKeydown);
-});
-
-onUnmounted(() => {
-	window.removeEventListener("keydown", handleKeydown);
+useKeyboardShortcuts({
+	shortcuts: [
+		{
+			key: "k",
+			meta: true,
+			action: () => (showCommandPalette.value = true),
+		},
+	],
 });
 </script>
 
@@ -305,9 +151,7 @@ onUnmounted(() => {
 							{{ showTrash ? "Trash" : "My Projects" }}
 						</h1>
 						<p class="text-gray-600 dark:text-gray-400 mt-1">
-							{{ filteredProjects.length }} project{{
-								filteredProjects.length !== 1 ? "s" : ""
-							}}
+							{{ resultCount }} project{{ resultCount !== 1 ? "s" : "" }}
 						</p>
 					</div>
 					<div class="flex items-center gap-3">
@@ -554,14 +398,14 @@ onUnmounted(() => {
 						</button>
 					</div>
 					<button
-						v-if="filteredProjects.length > 0 && !showTrash"
+						v-if="resultCount > 0 && !showTrash"
 						class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
 						@click="selectAll"
 					>
 						{{
-							selectedProjects.size === filteredProjects.length
-							? "Deselect All"
-							: "Select All"
+							isAllSelected
+								? "Deselect All"
+								: "Select All"
 						}}
 					</button>
 				</div>
@@ -624,7 +468,7 @@ onUnmounted(() => {
 
 				<!-- Empty State -->
 				<div
-					v-else-if="filteredProjects.length === 0"
+					v-else-if="resultCount === 0"
 					class="text-center py-16"
 				>
 					<div class="text-6xl mb-4">📁</div>
@@ -724,8 +568,8 @@ onUnmounted(() => {
 
 	<!-- Bulk Actions Toolbar -->
 	<BulkActionsToolbar
-		v-if="selectedProjects.size > 0"
-		:selected-count="selectedProjects.size"
+		v-if="hasSelection"
+		:selected-count="selectedCount"
 		@delete="bulkDelete"
 		@duplicate="bulkDuplicate"
 		@move="console.log('Move')"

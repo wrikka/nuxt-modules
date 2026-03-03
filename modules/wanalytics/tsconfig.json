@@ -1,51 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "#analytics/*": [
-        "./src/runtime/*"
-      ],
-      "#analytics": [
-        "./src/runtime"
-      ],
-      "#analytics/types": [
-        "./src/runtime/types"
-      ],
-      "#imports": [
-        "./node_modules/nuxt/dist/app/nuxt"
-      ],
-      "#app": [
-        "./node_modules/nuxt/dist/app"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
     },
-    "types": [
-      "vitest/globals",
-      "node",
-      "nuxt/schema"
-    ]
-  },
-  "include": [
-    "src/**/*",
-    "test/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".nuxt"
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
   ]
 }

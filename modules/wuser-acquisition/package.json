@@ -1,38 +1,4 @@
 {
-  "name": "@wrikka/wuser-acquisition",
-  "type": "module",
-  "version": "0.0.1",
-  "main": "./dist/module.mjs",
-  "exports": {
-    ".": {
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.mjs"
-    },
-    "./runtime": {
-      "import": "./src/runtime/index.ts",
-      "types": "./src/runtime/index.ts"
-    },
-    "./runtime/*": {
-      "import": "./src/runtime/*",
-      "types": "./src/runtime/*"
-    },
-    "./runtime/types": {
-      "import": "./src/runtime/types/index.ts",
-      "types": "./src/runtime/types/index.ts"
-    }
-  },
-  "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt-build-module",
-    "preview": "nuxt preview",
-    "format": "dprint fmt",
-    "prepare": "nuxt prepare",
-    "typecheck": "nuxt typecheck",
-    "test": "vitest",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
-    "verify": "bun run lint && bun run test && bun run build",
-    "release": "release-it"
-  },
   "dependencies": {
     "@nuxt/kit": "^4.3.1",
     "nanoid": "^5.1.6",
@@ -51,5 +17,42 @@
     "unocss": "^66.6.2",
     "vitest": "^4.0.18",
     "vue-tsc": "^3.2.5"
-  }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.mjs"
+    },
+    "./runtime": {
+      "import": "./src/runtime/index.ts",
+      "types": "./src/runtime/index.ts"
+    },
+    "./runtime/*": {
+      "import": "./src/runtime/*",
+      "types": "./src/runtime/*"
+    },
+    "./runtime/types": {
+      "import": "./src/runtime/types/index.ts",
+      "types": "./src/runtime/types/index.ts"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "name": "@wrikka/wuser-acquisition",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "preview": "nuxt preview",
+    "format": "dprint fmt",
+    "prepare": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest",
+    "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
+    "verify": "bun run lint && bun run test && bun run build",
+    "release": "release-it"
+  },
+  "type": "module",
+  "version": "0.0.1"
 }

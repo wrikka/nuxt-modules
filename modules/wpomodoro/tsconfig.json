@@ -1,54 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"lib": [
-			"ESNext",
-			"DOM",
-			"DOM.Iterable"
-		],
-		"jsx": "preserve",
-		"strict": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"isolatedModules": true,
-		"verbatimModuleSyntax": true,
-		"resolveJsonModule": true,
-		"declaration": true,
-		"declarationMap": true,
-		"sourceMap": true,
-		"paths": {
-			"#pomodoro": [
-				"./src/runtime"
-			],
-			"#pomodoro/*": [
-				"./src/runtime/*"
-			],
-			"#imports": [
-				"./.nuxt/imports"
-			],
-			"#app": [
-				"./.nuxt/types/app"
-			],
-			"@wpackages/*": [
-				"../../../packages/*/src",
-				"../../../utils/*/src"
-			]
-		}
-	},
-	"include": [
-		"src/**/*",
-		"./nuxt.config.ts",
-		"./uno.config.ts",
-		".nuxt/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"dist",
-		"**/*.test.ts"
-	]
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
+  ]
 }

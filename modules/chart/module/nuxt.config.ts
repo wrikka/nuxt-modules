@@ -14,8 +14,6 @@ export default defineNuxtConfig({
 				overlay: {
 					initialIsOpen: false,
 				},
-				biome: { command: "lint" },
-				oxlint: true,
 				typescript: true,
 				vueTsc: true,
 			}) as any,

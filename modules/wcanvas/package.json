@@ -1,10 +1,7 @@
 {
-  "name": "wcanvas",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "main": "./pkg/canvas.js",
-  "types": "./pkg/canvas.d.ts",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "exports": {
     ".": {
       "types": "./pkg/canvas.d.ts",
@@ -14,9 +11,12 @@
   "files": [
     "pkg"
   ],
-  "engines": {
-    "bun": ">=1.0.0"
+  "main": "./pkg/canvas.js",
+  "name": "wcanvas",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
   },
+  "private": true,
   "scripts": {
     "dev": "nuxt dev",
     "check": "cargo check",
@@ -31,5 +31,8 @@
     "verify": "bun run format -- --check && bun run lint && bun run test:nextest && cargo audit && cargo deny check",
     "verify:ci": "bun run format -- --check && bun run lint && bun run test:nextest --ci && cargo audit && cargo deny check",
     "release": "release-it"
-  }
+  },
+  "type": "module",
+  "types": "./pkg/canvas.d.ts",
+  "version": "0.1.0"
 }

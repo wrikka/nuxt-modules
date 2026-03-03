@@ -1,96 +1,13 @@
 {
-    "compilerOptions": {
-        "types": [
-            "@types/bun"
-        ]
-    },
-    "references": [
-        {
-            "path": "./wcomposables"
-        },
-        {
-            "path": "./modules/wai-chatinput"
-        },
-        {
-            "path": "./modules/waccount"
-        },
-        {
-            "path": "./modules/wanalytics"
-        },
-        {
-            "path": "./modules/wcanvas"
-        },
-        {
-            "path": "./modules/wchat"
-        },
-        {
-            "path": "./modules/wcommand-palette"
-        },
-        {
-            "path": "./modules/wcontent"
-        },
-        {
-            "path": "./modules/webhooks"
-        },
-        {
-            "path": "./modules/wemail"
-        },
-        {
-            "path": "./modules/wfeature-flags"
-        },
-        {
-            "path": "./modules/wfileupload"
-        },
-        {
-            "path": "./modules/wform"
-        },
-        {
-            "path": "./modules/whabbit"
-        },
-        {
-            "path": "./modules/wmedia-studio"
-        },
-        {
-            "path": "./modules/wnotes"
-        },
-        {
-            "path": "./modules/wnotifications"
-        },
-        {
-            "path": "./modules/wonboarding"
-        },
-        {
-            "path": "./modules/wpayment"
-        },
-        {
-            "path": "./modules/wpersonalize-news"
-        },
-        {
-            "path": "./modules/wpomodoro"
-        },
-        {
-            "path": "./modules/wsheet"
-        },
-        {
-            "path": "./modules/wshop"
-        },
-        {
-            "path": "./modules/wslide"
-        },
-        {
-            "path": "./modules/wtasks"
-        },
-        {
-            "path": "./modules/wui"
-        },
-        {
-            "path": "./modules/wuser-acquisition"
-        },
-        {
-            "path": "./modules/wwebhooks"
-        },
-        {
-            "path": "./modules/wwhiteboard"
-        }
-    ]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "dist", ".nuxt"]
 }

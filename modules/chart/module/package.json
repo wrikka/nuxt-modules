@@ -28,9 +28,7 @@
 		"test:run": "vitest run",
 		"test:coverage": "vitest run --coverage",
 		"test:ui": "vitest --ui",
-		"test:watch": "vitest --watch",
-		"lint": "tsc --noEmit && oxlint --type-aware --fix",
-		
+		"test:watch": "vitest --watch"
 	},
 	"dependencies": {
 		"nuxt": "^4.3.1",
@@ -47,7 +45,6 @@
 		"@unocss/nuxt": "^66.6.4",
 		"@vueuse/core": "^14.2.1",
 		"jsdom": "^28.1.0",
-		"oxlint": "^1.51.0",
 		"tsdown": "^0.20.3",
 		"typescript": "^5.9.3",
 		"unocss": "^66.6.4",

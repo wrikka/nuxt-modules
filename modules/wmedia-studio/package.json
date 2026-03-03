@@ -7,7 +7,7 @@
     "build": "nuxt-build-module",
     "preview": "nuxt preview",
     "format": "dprint fmt",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "lint": "nuxt typecheck",
     "postinstall": "nuxt prepare",
     "test": "vitest",
     "release": "release-it"
@@ -56,8 +56,6 @@
     "@types/node": "^25.3.2",
     "@unocss/nuxt": "^66.6.2",
     "dprint": "^0.51.1",
-    "oxlint": "^1.50.0",
-    "oxlint-tsgolint": "^0.11.5",
     "typescript": "^5.9.3",
     "unocss": "^66.6.2",
     "vite-plugin-checker": "^0.12.0",

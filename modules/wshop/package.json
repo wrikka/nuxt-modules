@@ -1,42 +1,4 @@
 {
-  "name": "@wrikka/wshop",
-  "version": "0.0.1",
-  "description": "WShop e-commerce module for Nuxt with Stripe integration",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/module.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
-    },
-    "./runtime": {
-      "import": "./src/runtime/index.ts",
-      "types": "./src/runtime/index.ts"
-    },
-    "./runtime/*": {
-      "import": "./src/runtime/*",
-      "types": "./src/runtime/*"
-    }
-  },
-  "main": "./dist/module.cjs",
-  "types": "./dist/module.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt-build-module",
-    "preview": "nuxi preview playground",
-    "format": "dprint fmt",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
-    "typecheck": "vue-tsc --noEmit",
-    "prepare": "nuxt prepare",
-    "prepublishOnly": "npm run build",
-    "release": "release-it"
-  },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
@@ -71,6 +33,7 @@
     "winston": "^3.19.0",
     "zod": "^3.25.76"
   },
+  "description": "WShop e-commerce module for Nuxt with Stripe integration",
   "devDependencies": {
     "@nuxt/icon": "^2.2.1",
     "@nuxt/kit": "^4.3.1",
@@ -97,15 +60,53 @@
     "knip": "^5.85.0",
     "lodash-es": "^4.17.23",
     "nuxt-mcp-dev": "^0.3.2",
-    "oxlint": "^1.50.0",
-    "oxlint-tsgolint": "^0.11.5",
     "typescript": "^5.9.3",
     "vite-plugin-checker": "^0.12.0",
     "vitest": "^2.1.9",
     "vue-chartjs": "^5.3.3",
     "vue-tsc": "^3.2.5"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    },
+    "./runtime": {
+      "import": "./src/runtime/index.ts",
+      "types": "./src/runtime/index.ts"
+    },
+    "./runtime/*": {
+      "import": "./src/runtime/*",
+      "types": "./src/runtime/*"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/module.cjs",
+  "name": "@wrikka/wshop",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
   "peerDependencies": {
     "nuxt": "^4.3.0"
-  }
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "preview": "nuxi preview playground",
+    "format": "dprint fmt",
+    "lint": "nuxt typecheck",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "typecheck": "vue-tsc --noEmit",
+    "prepare": "nuxt prepare",
+    "prepublishOnly": "npm run build",
+    "release": "release-it"
+  },
+  "type": "module",
+  "types": "./dist/module.d.ts",
+  "version": "0.0.1"
 }

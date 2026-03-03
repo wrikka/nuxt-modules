@@ -5,16 +5,18 @@ import ArtboardSettingsModal from "~/components/designer/ArtboardSettingsModal.v
 import AssetLibraryModal from "~/components/designer/AssetLibraryModal.vue";
 import CommandPalette from "~/components/designer/CommandPalette.vue";
 import type { DesignerLayerItem } from "~/components/designer/DesignerLayersPanel.vue";
-import type {
-	DesignToken,
-	TokenCategory,
-} from "~/components/designer/DesignTokensPanel.vue";
+import type { DesignToken, TokenCategory } from "~/components/designer/DesignTokensPanel.vue";
 import DesignTokensPanel from "~/components/designer/DesignTokensPanel.vue";
 import ExportModal from "~/components/designer/ExportModal.vue";
 import ShortcutsModal from "~/components/designer/ShortcutsModal.vue";
 import TemplatesModal from "~/components/designer/TemplatesModal.vue";
 import EditorCanvas from "~/components/editor/Canvas.vue";
+import { useDesignerCommands } from "~/composables/useDesignerCommands";
 import { useDesignerDocument } from "~/composables/useDesignerDocument";
+import { useDesignerFullscreen } from "~/composables/useDesignerFullscreen";
+import { useDesignerModals } from "~/composables/useDesignerModals";
+import { useDesignerTokens } from "~/composables/useDesignerTokens";
+import { useDesignerUpload } from "~/composables/useDesignerUpload";
 
 const route = useRoute();
 const projectId = computed(() => route.params.id as string);
@@ -31,642 +33,198 @@ let resizeRaf: number | null = null;
 const uiError = ref<string | null>(null);
 
 const setUiError = (message: string) => {
-	uiError.value = message;
+  uiError.value = message;
 };
 
 const clearUiError = () => {
-	uiError.value = null;
+  uiError.value = null;
 };
 
-const imageModalOpen = ref(false);
-const imageUrl = ref("");
-const fileInputRef = ref<HTMLInputElement | null>(null);
-const selectedFile = ref<File | null>(null);
-const isUploading = ref(false);
+// Fullscreen
+const { isFullscreen, toggleFullscreen } = useDesignerFullscreen();
 
-const exportModalOpen = ref(false);
-const exportOptions = ref({
-	format: "png" as "png" | "svg" | "json",
-	multiplier: 2,
-	includeBackground: true,
-	selectionOnly: false,
+// Tokens
+const tokens = useDesignerTokens({
+  projectId: projectId.value,
+  onTokenSelect: (tokenId, token) => {
+    if (token && doc.selected.value) {
+      if (token.type === "color") {
+        doc.updateProperty("fill", token.value);
+      }
+    }
+  },
 });
 
-const artboardModalOpen = ref(false);
-const pendingArtboard = ref({ width: 1200, height: 800 });
+// Upload
+const upload = useDesignerUpload({
+  onUploadSuccess: (url) => {
+    doc.addImage(url);
+    clearUiError();
+  },
+  onUploadError: (error) => {
+    setUiError(error);
+  },
+});
 
-const assetLibraryModalOpen = ref(false);
-const templatesModalOpen = ref(false);
-const shortcutsModalOpen = ref(false);
-const commandPaletteRef = ref<InstanceType<typeof CommandPalette> | null>(null);
+// Modals
+const modals = useDesignerModals();
 
-const commands = computed(() => [
-	{ id: "undo", label: "Undo", shortcut: "Ctrl+Z", action: () => doc.undo() },
-	{ id: "redo", label: "Redo", shortcut: "Ctrl+Y", action: () => doc.redo() },
-	{
-		id: "save",
-		label: "Save Project",
-		shortcut: "Ctrl+S",
-		action: () => doc.save(),
-	},
-	{
-		id: "duplicate",
-		label: "Duplicate Selected",
-		shortcut: "Ctrl+D",
-		action: () => doc.duplicateSelected(),
-	},
-	{
-		id: "delete",
-		label: "Delete Selected",
-		shortcut: "Delete",
-		action: () => doc.deleteSelected(),
-	},
-	{
-		id: "zoom-in",
-		label: "Zoom In",
-		shortcut: "Ctrl++",
-		action: () => doc.zoomIn(),
-	},
-	{
-		id: "zoom-out",
-		label: "Zoom Out",
-		shortcut: "Ctrl+-",
-		action: () => doc.zoomOut(),
-	},
-	{
-		id: "reset-zoom",
-		label: "Reset Zoom",
-		shortcut: "Ctrl+0",
-		action: () => doc.resetZoom(),
-	},
-	{ id: "add-text", label: "Add Text", action: () => doc.addText() },
-	{
-		id: "add-rectangle",
-		label: "Add Rectangle",
-		action: () => doc.addRectangle(),
-	},
-	{ id: "add-circle", label: "Add Circle", action: () => doc.addCircle() },
-	{
-		id: "toggle-fullscreen",
-		label: "Toggle Fullscreen",
-		shortcut: "F11",
-		action: () => toggleFullscreen(),
-	},
-	{
-		id: "toggle-tokens",
-		label: "Toggle Design Tokens",
-		action: () => showTokensPanel.value = !showTokensPanel.value,
-	},
-]);
-
-const showTokensPanel = ref(false);
-const selectedTokenId = ref<string | null>(null);
-
-// Sample design tokens data - can be replaced with actual data from API/composable
-const tokenCategories = ref<TokenCategory[]>([
-	{
-		id: "colors",
-		name: "Colors",
-		tokens: [
-			{
-				id: "primary",
-				name: "Primary",
-				type: "color",
-				value: "#3B82F6",
-				category: "colors",
-			},
-			{
-				id: "secondary",
-				name: "Secondary",
-				type: "color",
-				value: "#8B5CF6",
-				category: "colors",
-			},
-			{
-				id: "success",
-				name: "Success",
-				type: "color",
-				value: "#10B981",
-				category: "colors",
-			},
-			{
-				id: "warning",
-				name: "Warning",
-				type: "color",
-				value: "#F59E0B",
-				category: "colors",
-			},
-			{
-				id: "danger",
-				name: "Danger",
-				type: "color",
-				value: "#EF4444",
-				category: "colors",
-			},
-		],
-	},
-	{
-		id: "spacing",
-		name: "Spacing",
-		tokens: [
-			{ id: "xs", name: "XS", type: "spacing", value: 4, category: "spacing" },
-			{ id: "sm", name: "SM", type: "spacing", value: 8, category: "spacing" },
-			{ id: "md", name: "MD", type: "spacing", value: 16, category: "spacing" },
-			{ id: "lg", name: "LG", type: "spacing", value: 24, category: "spacing" },
-			{ id: "xl", name: "XL", type: "spacing", value: 32, category: "spacing" },
-		],
-	},
-	{
-		id: "typography",
-		name: "Typography",
-		tokens: [
-			{
-				id: "font-sans",
-				name: "Font Sans",
-				type: "typography",
-				value: "Inter, sans-serif",
-				category: "typography",
-			},
-			{
-				id: "font-mono",
-				name: "Font Mono",
-				type: "typography",
-				value: "JetBrains Mono, monospace",
-				category: "typography",
-			},
-		],
-	},
-	{
-		id: "shadows",
-		name: "Shadows",
-		tokens: [
-			{
-				id: "shadow-sm",
-				name: "Shadow SM",
-				type: "shadow",
-				value: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-				category: "shadows",
-			},
-			{
-				id: "shadow-md",
-				name: "Shadow MD",
-				type: "shadow",
-				value: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-				category: "shadows",
-			},
-			{
-				id: "shadow-lg",
-				name: "Shadow LG",
-				type: "shadow",
-				value: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
-				category: "shadows",
-			},
-		],
-	},
-]);
-
-const handleSelectToken = (tokenId: string) => {
-	selectedTokenId.value = tokenId;
-	// Apply token to selected object
-	const token = tokenCategories.value.flatMap(c => c.tokens).find(t =>
-		t.id === tokenId
-	);
-	if (token && doc.selected.value) {
-		if (token.type === "color") {
-			doc.updateProperty("fill", token.value);
-		}
-	}
-};
-
-const handleCreateToken = (category: string) => {
-	const newToken: DesignToken = {
-		id: `token-${Date.now()}`,
-		name: "New Token",
-		type: category === "colors"
-			? "color"
-			: category === "spacing"
-			? "spacing"
-			: category === "typography"
-			? "typography"
-			: "shadow",
-		value: category === "colors"
-			? "#000000"
-			: category === "spacing"
-			? 16
-			: "default",
-		category,
-	};
-	const cat = tokenCategories.value.find(c => c.id === category);
-	if (cat) {
-		cat.tokens.push(newToken);
-	}
-};
-
-const handleUpdateToken = (tokenId: string, updates: Partial<DesignToken>) => {
-	for (const cat of tokenCategories.value) {
-		const token = cat.tokens.find(t => t.id === tokenId);
-		if (token) {
-			Object.assign(token, updates);
-			break;
-		}
-	}
-};
-
-const handleDeleteToken = (tokenId: string) => {
-	for (const cat of tokenCategories.value) {
-		const index = cat.tokens.findIndex(t => t.id === tokenId);
-		if (index > -1) {
-			cat.tokens.splice(index, 1);
-			break;
-		}
-	}
-	if (selectedTokenId.value === tokenId) {
-		selectedTokenId.value = null;
-	}
-};
-
-const handleDuplicateToken = (tokenId: string) => {
-	for (const cat of tokenCategories.value) {
-		const token = cat.tokens.find(t => t.id === tokenId);
-		if (token) {
-			const newToken: DesignToken = {
-				...token,
-				id: `token-${Date.now()}`,
-				name: `${token.name} (Copy)`,
-			};
-			cat.tokens.push(newToken);
-			break;
-		}
-	}
-};
-
-const handleImportTokens = () => {
-	// Handle import - could open file picker
-	console.log("Import tokens");
-};
-
-const handleExportTokens = () => {
-	// Handle export - download as JSON
-	const data = JSON.stringify(tokenCategories.value, null, 2);
-	const blob = new Blob([data], { type: "application/json" });
-	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = `design-tokens-${projectId.value}.json`;
-	a.click();
-	URL.revokeObjectURL(url);
-};
-
-// Fullscreen state
-const isFullscreen = ref(false);
-
-const toggleFullscreen = async () => {
-	try {
-		if (!document.fullscreenElement) {
-			await document.documentElement.requestFullscreen();
-			isFullscreen.value = true;
-		} else {
-			await document.exitFullscreen();
-			isFullscreen.value = false;
-		}
-	} catch (err) {
-		console.error("Fullscreen error:", err);
-	}
-};
-
-// Listen for fullscreen changes
-const handleFullscreenChange = () => {
-	isFullscreen.value = !!document.fullscreenElement;
-};
-
-const formatFileSize = (bytes: number): string => {
-	if (bytes === 0) return "0 Bytes";
-	const k = 1024;
-	const sizes = ["Bytes", "KB", "MB", "GB"];
-	const i = Math.floor(Math.log(bytes) / Math.log(k));
-	return `${Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${
-		sizes[i]
-	}`;
-};
-
-const isDragging = ref(false);
-
-const handleDragOver = (e: DragEvent) => {
-	e.preventDefault();
-	isDragging.value = true;
-};
-
-const handleDragLeave = (e: DragEvent) => {
-	e.preventDefault();
-	isDragging.value = false;
-};
-
-const handleDrop = async (e: DragEvent) => {
-	e.preventDefault();
-	isDragging.value = false;
-
-	const files = e.dataTransfer?.files;
-	if (!files || files.length === 0) return;
-
-	const file = files[0];
-	if (!file || !file.type.startsWith("image/")) {
-		setUiError("Please drop an image file");
-		return;
-	}
-
-	try {
-		isUploading.value = true;
-		const url = await uploadImage(file);
-		await doc.addImage(url);
-		clearUiError();
-	} catch (err) {
-		console.error("Failed to upload dropped image:", err);
-		setUiError("Failed to upload image. Please try again.");
-	} finally {
-		isUploading.value = false;
-	}
-};
-
-const handleFileSelect = (event: Event) => {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-	if (file) {
-		selectedFile.value = file;
-		imageUrl.value = "";
-	}
-};
-
-const clearSelectedFile = () => {
-	selectedFile.value = null;
-	if (fileInputRef.value) {
-		fileInputRef.value.value = "";
-	}
-};
-
-const uploadImage = async (file: File): Promise<string> => {
-	const formData = new FormData();
-	formData.append("file", file);
-
-	const response = await $fetch<{ success: boolean; url: string }>(
-		"/api/designer/image-upload",
-		{
-			method: "POST",
-			body: formData,
-		},
-	);
-
-	if (!response.success || !response.url) {
-		throw new Error("Failed to upload image");
-	}
-
-	return response.url;
-};
-
-const getCanvas = () => {
-	const canvas = canvasComponent.value?.canvas;
-	if (!canvas) return null;
-	return canvas;
-};
-
-const ensureInitialized = async () => {
-	await nextTick();
-	const canvas = getCanvas();
-	if (!canvas) return;
-
-	await doc.init(canvas, doc.artboard.width, doc.artboard.height);
-	await nextTick();
-	const el = viewportRef.value;
-	if (el) {
-		doc.fitToViewport(el.clientWidth, el.clientHeight);
-	}
-};
-
-const setupViewportObserver = () => {
-	const el = viewportRef.value;
-	if (!el) return;
-	if (typeof ResizeObserver === "undefined") return;
-
-	resizeObserver?.disconnect();
-	resizeObserver = new ResizeObserver(() => {
-		if (resizeRaf != null) {
-			cancelAnimationFrame(resizeRaf);
-		}
-		resizeRaf = requestAnimationFrame(() => {
-			resizeRaf = null;
-			doc.fitToViewport(el.clientWidth, el.clientHeight);
-		});
-	});
-	resizeObserver.observe(el);
-};
-
-const openImageModal = () => {
-	imageUrl.value = "";
-	imageModalOpen.value = true;
-};
-
-const openExportModal = () => {
-	exportModalOpen.value = true;
-};
-
-const openArtboardModal = () => {
-	pendingArtboard.value = { ...doc.artboard };
-	artboardModalOpen.value = true;
-};
-
-const handleUpdateArtboard = (artboard: { width: number; height: number }) => {
-	pendingArtboard.value = artboard;
-};
-
-const handleApplyArtboard = () => {
-	doc.artboard.width = pendingArtboard.value.width;
-	doc.artboard.height = pendingArtboard.value.height;
-	artboardModalOpen.value = false;
-};
-
-const openAssetLibraryModal = () => {
-	assetLibraryModalOpen.value = true;
-};
+// Commands
+const { commands, commandPaletteRef, openCommandPalette, handleKeydown } = useDesignerCommands({
+  onUndo: () => doc.undo(),
+  onRedo: () => doc.redo(),
+  onSave: () => doc.save(),
+  onDuplicate: () => doc.duplicateSelected(),
+  onDelete: () => doc.deleteSelected(),
+  onZoomIn: () => doc.zoomIn(),
+  onZoomOut: () => doc.zoomOut(),
+  onResetZoom: () => doc.resetZoom(),
+  onToggleFullscreen: toggleFullscreen,
+  onToggleTokens: tokens.toggleTokensPanel,
+  onAddText: () => doc.addText(),
+  onAddRectangle: () => doc.addRectangle(),
+  onAddCircle: () => doc.addCircle(),
+  onOpenCommandPalette: openCommandPalette,
+});
 
 const handleSelectAsset = async (asset: { url: string; type: string }) => {
-	if (asset.type === "image") {
-		try {
-			await doc.addImage(asset.url);
-			assetLibraryModalOpen.value = false;
-			clearUiError();
-		} catch (err) {
-			console.error("Failed to add asset:", err);
-			setUiError("Failed to add asset. Please try again.");
-		}
-	}
-};
-
-const openTemplatesModal = () => {
-	templatesModalOpen.value = true;
-};
-
-const openShortcutsModal = () => {
-	shortcutsModalOpen.value = true;
+  if (asset.type === "image") {
+    try {
+      await doc.addImage(asset.url);
+      modals.assetLibraryModalOpen.value = false;
+      clearUiError();
+    } catch (err) {
+      console.error("Failed to add asset:", err);
+      setUiError("Failed to add asset. Please try again.");
+    }
+  }
 };
 
 const handleSelectTemplate = async (template: { objects: any[] }) => {
-	try {
-		await doc.loadTemplate(template.objects);
-		templatesModalOpen.value = false;
-		clearUiError();
-	} catch (err) {
-		console.error("Failed to load template:", err);
-		setUiError("Failed to load template. Please try again.");
-	}
+  try {
+    await doc.loadTemplate(template.objects);
+    modals.templatesModalOpen.value = false;
+    clearUiError();
+  } catch (err) {
+    console.error("Failed to load template:", err);
+    setUiError("Failed to load template. Please try again.");
+  }
 };
 
 const handleExport = () => {
-	const opts = exportOptions.value;
-	if (opts.format === "png") {
-		doc.exportPng({
-			multiplier: opts.multiplier,
-			selectionOnly: opts.selectionOnly,
-		});
-	} else if (opts.format === "svg") {
-		doc.exportSvg();
-	} else if (opts.format === "json") {
-		doc.exportJson();
-	}
-	exportModalOpen.value = false;
+  const opts = modals.exportOptions.value;
+  if (opts.format === "png") {
+    doc.exportPng({
+      multiplier: opts.multiplier,
+      selectionOnly: opts.selectionOnly,
+    });
+  } else if (opts.format === "svg") {
+    doc.exportSvg();
+  } else if (opts.format === "json") {
+    doc.exportJson();
+  }
+  modals.exportModalOpen.value = false;
 };
 
-const isEditableTarget = (target: EventTarget | null) => {
-	const el = target as HTMLElement | null;
-	if (!el) return false;
-	const tag = el.tagName?.toLowerCase();
-	if (tag === "input" || tag === "textarea" || tag === "select") return true;
-	return el.isContentEditable === true;
+const getCanvas = () => {
+  const canvas = canvasComponent.value?.canvas;
+  if (!canvas) return null;
+  return canvas;
+};
+
+const ensureInitialized = async () => {
+  await nextTick();
+  const canvas = getCanvas();
+  if (!canvas) return;
+
+  await doc.init(canvas, doc.artboard.width, doc.artboard.height);
+  await nextTick();
+  const el = viewportRef.value;
+  if (el) {
+    doc.fitToViewport(el.clientWidth, el.clientHeight);
+  }
+};
+
+const setupViewportObserver = () => {
+  const el = viewportRef.value;
+  if (!el) return;
+  if (typeof ResizeObserver === "undefined") return;
+
+  resizeObserver?.disconnect();
+  resizeObserver = new ResizeObserver(() => {
+    if (resizeRaf != null) {
+      cancelAnimationFrame(resizeRaf);
+    }
+    resizeRaf = requestAnimationFrame(() => {
+      resizeRaf = null;
+      doc.fitToViewport(el.clientWidth, el.clientHeight);
+    });
+  });
+  resizeObserver.observe(el);
+};
+
+const openArtboardModal = () => {
+  modals.openArtboardModal(doc.artboard);
+};
+
+const handleApplyArtboard = () => {
+  doc.artboard.width = modals.pendingArtboard.value.width;
+  doc.artboard.height = modals.pendingArtboard.value.height;
+  modals.artboardModalOpen.value = false;
+};
+
+const handleDrop = async (e: DragEvent) => {
+  const url = await upload.handleDrop(e);
+  if (url) {
+    await doc.addImage(url);
+  }
 };
 
 const handleAddImage = async () => {
-	if (selectedFile.value) {
-		try {
-			isUploading.value = true;
-			const url = await uploadImage(selectedFile.value);
-			await doc.addImage(url);
-			imageModalOpen.value = false;
-			clearSelectedFile();
-			imageUrl.value = "";
-			clearUiError();
-		} catch (err) {
-			console.error("Failed to upload image:", err);
-			setUiError("Failed to upload image. Please try again.");
-		} finally {
-			isUploading.value = false;
-		}
-	} else if (imageUrl.value.trim()) {
-		try {
-			await doc.addImage(imageUrl.value.trim());
-			imageModalOpen.value = false;
-			imageUrl.value = "";
-			clearUiError();
-		} catch (err) {
-			console.error("Failed to add image:", err);
-			setUiError("Failed to load image. Please check the URL and try again.");
-		}
-	}
-};
-
-const handleKeydown = (e: KeyboardEvent) => {
-	if (isEditableTarget(e.target)) return;
-
-	const mod = e.ctrlKey || e.metaKey;
-	if (mod && (e.key === "z" || e.key === "Z") && !e.shiftKey) {
-		e.preventDefault();
-		void doc.undo();
-		return;
-	}
-	if (
-		mod
-		&& ((e.key === "y" || e.key === "Y")
-			|| (e.shiftKey && (e.key === "z" || e.key === "Z")))
-	) {
-		e.preventDefault();
-		void doc.redo();
-		return;
-	}
-	if (mod && (e.key === "s" || e.key === "S")) {
-		e.preventDefault();
-		doc.save();
-		return;
-	}
-	if (mod && (e.key === "d" || e.key === "D")) {
-		e.preventDefault();
-		doc.duplicateSelected();
-		return;
-	}
-	if (mod && (e.key === "+" || e.key === "=")) {
-		e.preventDefault();
-		doc.zoomIn();
-		return;
-	}
-	if (mod && (e.key === "-")) {
-		e.preventDefault();
-		doc.zoomOut();
-		return;
-	}
-	if (mod && e.key === "0") {
-		e.preventDefault();
-		doc.resetZoom();
-		return;
-	}
-	if (e.key === "Delete" || e.key === "Backspace") {
-		e.preventDefault();
-		doc.deleteSelected();
-		return;
-	}
-	if (mod && e.key === "k") {
-		e.preventDefault();
-		commandPaletteRef.value?.openPalette();
-		return;
-	}
+  const url = await upload.handleAddImage();
+  if (url) {
+    modals.imageModalOpen.value = false;
+  }
 };
 
 onMounted(() => {
-	void ensureInitialized();
-	setupViewportObserver();
-	document.addEventListener("keydown", handleKeydown);
-	document.addEventListener("wheel", doc.handleWheel, { passive: false });
-	document.addEventListener("mousedown", doc.handleMouseDown);
-	document.addEventListener("mousemove", doc.handleMouseMove);
-	document.addEventListener("mouseup", doc.handleMouseUp);
-	document.addEventListener("fullscreenchange", handleFullscreenChange);
+  void ensureInitialized();
+  setupViewportObserver();
+  document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("wheel", doc.handleWheel, { passive: false });
+  document.addEventListener("mousedown", doc.handleMouseDown);
+  document.addEventListener("mousemove", doc.handleMouseMove);
+  document.addEventListener("mouseup", doc.handleMouseUp);
 });
 
 onUnmounted(() => {
-	document.removeEventListener("keydown", handleKeydown);
-	document.removeEventListener("wheel", doc.handleWheel);
-	document.removeEventListener("mousedown", doc.handleMouseDown);
-	document.removeEventListener("mousemove", doc.handleMouseMove);
-	document.removeEventListener("mouseup", doc.handleMouseUp);
-	document.removeEventListener("fullscreenchange", handleFullscreenChange);
-	resizeObserver?.disconnect();
-	resizeObserver = null;
-	if (resizeRaf != null) {
-		cancelAnimationFrame(resizeRaf);
-		resizeRaf = null;
-	}
-	doc.dispose();
+  document.removeEventListener("keydown", handleKeydown);
+  document.removeEventListener("wheel", doc.handleWheel);
+  document.removeEventListener("mousedown", doc.handleMouseDown);
+  document.removeEventListener("mousemove", doc.handleMouseMove);
+  document.removeEventListener("mouseup", doc.handleMouseUp);
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+  if (resizeRaf != null) {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = null;
+  }
+  doc.dispose();
 });
 
 onBeforeRouteLeave((to, from, next) => {
-	if (doc.isDirty.value) {
-		const answer = window.confirm(
-			"You have unsaved changes. Are you sure you want to leave?",
-		);
-		if (answer) {
-			next();
-		} else {
-			next(false);
-		}
-	} else {
-		next();
-	}
+  if (doc.isDirty.value) {
+    const answer = window.confirm("You have unsaved changes. Are you sure you want to leave?");
+    if (answer) {
+      next();
+    } else {
+      next(false);
+    }
+  } else {
+    next();
+  }
 });
+
 </script>
 
 <template>
@@ -736,27 +294,27 @@ onBeforeRouteLeave((to, from, next) => {
 			@group="doc.group"
 			@ungroup="doc.ungroup"
 			@save="() => void doc.save()"
-			@export-png="openExportModal"
+			@export-png="modals.openExportModal"
 			@artboard-settings="openArtboardModal"
-			@asset-library="openAssetLibraryModal"
-			@templates="openTemplatesModal"
-			@shortcuts="openShortcutsModal"
+			@asset-library="modals.openAssetLibraryModal"
+			@templates="modals.openTemplatesModal"
+			@shortcuts="modals.openShortcutsModal"
 			@toggle-fullscreen="toggleFullscreen"
-			@toggle-tokens="showTokensPanel = !showTokensPanel"
+			@toggle-tokens="tokens.toggleTokensPanel"
 		/>
 
 		<div class="flex-1 flex overflow-hidden">
 			<div
 				ref="viewportRef"
 				class="flex-1 flex items-center justify-center overflow-auto p-6 relative"
-				:class="{ 'bg-blue-50/50 dark:bg-blue-900/20': isDragging }"
-				@dragover="handleDragOver"
-				@dragleave="handleDragLeave"
+				:class="{ 'bg-blue-50/50 dark:bg-blue-900/20': upload.isDragging.value }"
+				@dragover="upload.handleDragOver"
+				@dragleave="upload.handleDragLeave"
 				@drop="handleDrop"
 			>
 				<!-- Drag Overlay -->
 				<div
-					v-if="isDragging"
+					v-if="upload.isDragging.value"
 					class="absolute inset-0 z-50 flex items-center justify-center pointer-events-none"
 				>
 					<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-dashed border-blue-400 p-8 text-center">
@@ -815,7 +373,7 @@ onBeforeRouteLeave((to, from, next) => {
 				@distribute="doc.distributeObjects"
 				@apply-artboard-preset="doc.setArtboardSize"
 				@apply-pattern="doc.applyBackgroundPattern"
-				@export="openExportModal"
+				@export="modals.openExportModal"
 				@add-comment="(comment) => doc.addComment(comment.x, comment.y, comment.text)"
 				@resolve-comment="doc.resolveComment"
 				@delete-comment="doc.deleteComment"
@@ -829,7 +387,7 @@ onBeforeRouteLeave((to, from, next) => {
 				@rename="doc.renameLayer"
 			/>
 		</div>
-		<Modal :show="imageModalOpen" size="md" @close="imageModalOpen = false">
+		<Modal :show="modals.imageModalOpen.value" size="md" @close="modals.imageModalOpen.value = false">
 			<div class="p-6">
 				<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 					Add Image
@@ -843,7 +401,7 @@ onBeforeRouteLeave((to, from, next) => {
 							class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 						>Image URL</label>
 						<input
-							v-model="imageUrl"
+							v-model="upload.imageUrl.value"
 							type="text"
 							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white sm:text-sm"
 							placeholder="https://example.com/image.png"
@@ -888,11 +446,11 @@ onBeforeRouteLeave((to, from, next) => {
 										<span>Upload a file</span>
 										<input
 											id="file-upload"
-											ref="fileInputRef"
+											ref="upload.fileInputRef.value"
 											name="file-upload"
 											type="file"
 											class="sr-only"
-											@change="handleFileSelect"
+											@change="upload.handleFileSelect"
 										>
 									</label>
 									<p class="pl-1">or drag and drop</p>
@@ -903,15 +461,15 @@ onBeforeRouteLeave((to, from, next) => {
 							</div>
 						</div>
 						<div
-							v-if="selectedFile"
+							v-if="upload.selectedFile.value"
 							class="mt-2 text-sm text-gray-500 dark:text-gray-400"
 						>
-							Selected: {{ selectedFile.name }} ({{
-								formatFileSize(selectedFile.size)
+							Selected: {{ upload.selectedFile.value.name }} ({{
+								upload.formatFileSize(upload.selectedFile.value.size)
 							}})
 							<button
 								class="ml-2 text-red-500 hover:text-red-700"
-								@click="clearSelectedFile"
+								@click="upload.clearSelectedFile"
 							>
 								Remove
 							</button>
@@ -923,16 +481,16 @@ onBeforeRouteLeave((to, from, next) => {
 				<button
 					type="button"
 					class="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-					:disabled="isUploading"
+					:disabled="upload.isUploading.value"
 					@click="handleAddImage"
 				>
-					<span v-if="isUploading">Uploading...</span>
+					<span v-if="upload.isUploading.value">Uploading...</span>
 					<span v-else>Add Image</span>
 				</button>
 				<button
 					type="button"
 					class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-500 dark:hover:bg-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-					@click="imageModalOpen = false"
+					@click="modals.imageModalOpen.value = false"
 				>
 					Cancel
 				</button>
@@ -940,31 +498,31 @@ onBeforeRouteLeave((to, from, next) => {
 		</Modal>
 
 		<ExportModal
-			:isOpen="exportModalOpen"
-			:options="exportOptions"
-			@close="exportModalOpen = false"
+			:isOpen="modals.exportModalOpen.value"
+			:options="modals.exportOptions.value"
+			@close="modals.exportModalOpen.value = false"
 			@export="handleExport"
 		/>
 		<ArtboardSettingsModal
-			:isOpen="artboardModalOpen"
-			:artboard="pendingArtboard"
-			@close="artboardModalOpen = false"
-			@update="handleUpdateArtboard"
+			:isOpen="modals.artboardModalOpen.value"
+			:artboard="modals.pendingArtboard.value"
+			@close="modals.artboardModalOpen.value = false"
+			@update="modals.handleUpdateArtboard"
 			@apply="handleApplyArtboard"
 		/>
 		<AssetLibraryModal
-			:isOpen="assetLibraryModalOpen"
-			@close="assetLibraryModalOpen = false"
+			:isOpen="modals.assetLibraryModalOpen.value"
+			@close="modals.assetLibraryModalOpen.value = false"
 			@select="handleSelectAsset"
 		/>
 		<TemplatesModal
-			:isOpen="templatesModalOpen"
-			@close="templatesModalOpen = false"
+			:isOpen="modals.templatesModalOpen.value"
+			@close="modals.templatesModalOpen.value = false"
 			@select="handleSelectTemplate"
 		/>
 		<ShortcutsModal
-			:isOpen="shortcutsModalOpen"
-			@close="shortcutsModalOpen = false"
+			:isOpen="modals.shortcutsModalOpen.value"
+			@close="modals.shortcutsModalOpen.value = false"
 		/>
 		<CommandPalette ref="commandPaletteRef" :commands="commands" />
 	</div>

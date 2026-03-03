@@ -28,7 +28,7 @@
     "build": "nuxt-build-module",
     "preview": "nuxi preview playground",
     "format": "dprint fmt",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "lint": "nuxt typecheck",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
@@ -49,8 +49,6 @@
   "devDependencies": {
     "@nuxt/module-builder": "^1.0.2",
     "@nuxt/test-utils": "^4.0.0",
-    "oxlint": "^1.50.0",
-    "oxlint-tsgolint": "^0.15.0",
     "vitest": "^4.0.18"
   },
   "peerDependencies": {

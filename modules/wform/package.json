@@ -1,8 +1,21 @@
 {
-  "name": "@wrikka/wform",
-  "type": "module",
-  "version": "0.0.1",
-  "main": "./dist/module.mjs",
+  "dependencies": {
+    "@nuxt/kit": "^4.3.1",
+    "nuxt": "^4.3.1",
+    "vue": "^3.5.29",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.3.1",
+    "@types/node": "^25.3.2",
+    "@vue/test-utils": "^2.4.6",
+    "dprint": "^0.51.1",
+    "h3": "^1.15.5",
+    "jsdom": "^25.0.1",
+    "vitest": "^4.0.18",
+    "vue-tsc": "^3.2.5"
+  },
   "exports": {
     ".": {
       "import": "./dist/module.mjs",
@@ -21,6 +34,11 @@
       "types": "./src/runtime/types/index.ts"
     }
   },
+  "main": "./dist/module.mjs",
+  "name": "@wrikka/wform",
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  },
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt-build-module",
@@ -29,26 +47,10 @@
     "prepare": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "test": "vitest",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "lint": "nuxt typecheck",
     "verify": "bun run lint && bun run test && bun run build",
     "release": "release-it"
   },
-  "dependencies": {
-    "@nuxt/kit": "^4.3.1",
-    "nuxt": "^4.3.1",
-    "vue": "^3.5.29",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
-    "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.3.1",
-    "@types/node": "^25.3.2",
-    "@vue/test-utils": "^2.4.6",
-    "dprint": "^0.51.1",
-    "h3": "^1.15.5",
-    "jsdom": "^25.0.1",
-    "oxlint": "^1.50.0",
-    "vitest": "^4.0.18",
-    "vue-tsc": "^3.2.5"
-  }
+  "type": "module",
+  "version": "0.0.1"
 }

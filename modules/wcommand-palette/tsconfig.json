@@ -1,36 +1,17 @@
 {
-	"extends": "../../../packages/config/tsconfig/src/tsconfig.base.json",
-	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"lib": [
-			"ESNext",
-			"DOM",
-			"DOM.Iterable"
-		],
-		"jsx": "preserve",
-		"strict": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"moduleResolution": "bundler",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"declaration": true,
-		"declarationMap": true,
-		"paths": {
-			"#app": [
-				"./node_modules/nuxt/dist/app"
-			]
-		}
-	},
-	"include": [
-		"src/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"dist",
-		"**/*.test.ts"
-	]
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
+  ]
 }
