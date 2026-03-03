@@ -29,7 +29,8 @@
    ├── README.md
    ├── package.json
    ├── tsconfig.json
-   └── nuxt.config.ts
+   ├── nuxt.config.ts
+   └── uno.config.ts
    ```
 
 7. ทุก package.json ใน modules ต้องมี scripts ตามนี้คือ
@@ -39,6 +40,7 @@
      "build": "nuxt-build-module",
      "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
      "release": "release-it",
-     "test": "vitest"
+     "test": "vitest",
+     "postinstall": "nuxt prepare"
    }
    ```
