@@ -1,6 +1,14 @@
 pub(crate) mod buffers;
 #[cfg(target_arch = "wasm32")]
 pub mod client;
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod client_builder;
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod client_input;
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod client_render;
+#[cfg(target_arch = "wasm32")]
+pub(crate) mod client_shapes;
 pub(crate) mod pipeline;
 pub(crate) mod wgpu_setup;
 

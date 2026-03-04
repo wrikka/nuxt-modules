@@ -103,7 +103,9 @@ export default defineNuxtModule<ModuleOptions>({
       { name: 'useSpacedRepetition', from: resolver.resolve('./runtime/composables/useSpacedRepetition') },
       { name: 'useRSSGenerator', from: resolver.resolve('./runtime/composables/useRSSGenerator') },
       { name: 'useCommandPalette', from: resolver.resolve('./runtime/composables/useCommandPalette') },
-      { name: 'useZenMode', from: resolver.resolve('./runtime/composables/useZenMode') }
+      { name: 'useZenMode', from: resolver.resolve('./runtime/composables/useZenMode') },
+      // Mentions feature (like Notion @ mention)
+      { name: 'useMentions', from: resolver.resolve('./runtime/composables/useMentions') }
     ])
 
     // Add components

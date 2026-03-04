@@ -5,12 +5,24 @@ Animation Module for Nuxt - Powerful animation engine inspired by anime.js
 ## Features
 
 - 🎬 **Anime.js Integration** - Full anime.js animation library
-- 🎯 **Composables** - Ready-to-use animation composables
+- 🎯 **Composables** - 25+ ready-to-use animation composables
 - 🧩 **Components** - Pre-built animation components
 - 📜 **Scroll Animations** - Intersection Observer & parallax support
 - ⚡ **Auto-imports** - Automatic imports for Nuxt
 - 🔥 **Timeline** - Chain animations with timelines
 - 🎨 **Stagger Effects** - Create beautiful stagger animations
+- 🌊 **SVG Morphing** - Path-to-path shape morphing
+- ⚛️ **Physics Engine** - Spring, bounce, gravity effects
+- 📱 **Gestures** - Swipe, pinch, pan support
+- 🎭 **Text Animations** - Scramble, typewriter, decode effects
+- 🎪 **3D Transforms** - Perspective, flip, cube effects
+- 🎉 **Confetti** - Celebration particle effects
+- ♿ **Reduced Motion** - Accessibility support
+- 🌐 **Web Animations API** - Native WAAPI support
+- 🎬 **View Transitions API** - Page transitions
+- 🔥 **WebGL Particles** - GPU-accelerated particles
+- 📊 **Performance Profiler** - FPS monitoring
+- 🎪 **Effects** - Glitch, Neon, Liquid, Smoke, Fire
 
 ## Installation
 
@@ -26,7 +38,7 @@ export default defineNuxtConfig({
 })
 ```
 
-## Composables
+## Core Composables
 
 ### useAnimation
 
@@ -120,6 +132,99 @@ onMounted(() => {
 </script>
 ```
 
+## Advanced Composables
+
+### useMorphing - SVG Path Morphing
+
+```vue
+<script setup>
+const { morph, createMorphablePath } = useMorphing()
+
+onMounted(async () => {
+  const path = createMorphablePath('.morph-path')
+  await path.to('M10 10 L90 90', { duration: 1000 })
+})
+</script>
+```
+
+### usePhysics - Spring & Physics
+
+```vue
+<script setup>
+const { spring, bounce, gravity } = usePhysics()
+
+onMounted(() => {
+  spring('.box', { translateX: 200 }, { stiffness: 100 })
+  bounce('.ball', 100)
+})
+</script>
+```
+
+### useGestures - Touch Gestures
+
+```vue
+<script setup>
+const { swipe, pan } = useGestures()
+
+onMounted(() => {
+  swipe('.carousel', {
+    onSwipeLeft: () => nextSlide(),
+    onSwipeRight: () => prevSlide(),
+  })
+})
+</script>
+```
+
+### use3DTransforms - 3D Effects
+
+```vue
+<script setup>
+const { flip, card3D } = use3DTransforms()
+
+onMounted(() => {
+  card3D('.card', { intensity: 15 })
+})
+</script>
+```
+
+### useTextAnimation - Text Effects
+
+```vue
+<script setup>
+const { scramble, typewriter } = useTextAnimation()
+
+onMounted(() => {
+  scramble('.text')
+  typewriter('.type', 'Hello World!')
+})
+</script>
+```
+
+### useConfetti - Celebration Effects
+
+```vue
+<script setup>
+const { fire, burst } = useConfetti()
+
+const celebrate = () => {
+  fire({ particleCount: 150 })
+}
+</script>
+```
+
+### useSkeleton - Loading States
+
+```vue
+<script setup>
+const { createCard } = useSkeleton()
+
+onMounted(() => {
+  const { start, stop } = createCard('.card')
+  start()
+})
+</script>
+```
+
 ## Components
 
 ### WAnimation
@@ -167,6 +272,16 @@ onMounted(() => {
   </WReveal>
 </template>
 ```
+
+## Available Presets
+
+- `fadeIn`, `fadeOut` - Opacity transitions
+- `slideUp`, `slideDown`, `slideLeft`, `slideRight` - Directional slides
+- `scaleIn`, `scaleOut` - Scale transitions
+- `bounceIn`, `rotateIn`, `rotateOut` - Entrance/exit effects
+- `flipInX`, `flipInY` - 3D flips
+- `zoomIn`, `zoomOut` - Zoom effects
+- `pulse`, `shake`, `swing`, `wobble`, `jello`, `heartBeat` - Attention effects
 
 ## Utilities
 
