@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Token } from '../../types'
+import type { MentionItem } from '../composables/useMentions'
+import MentionPopup from './MentionPopup.vue'
 
 interface Block {
   id: string
@@ -25,6 +27,26 @@ const activeBlockId = ref<string>('')
 const showSlashMenu = ref(false)
 const slashMenuPosition = ref({ x: 0, y: 0 })
 const selectedBlockIndex = ref(0)
+
+// Mentions functionality
+const editorRef = ref<HTMLElement>()
+const { isOpen: showMentionPopup, items: mentionItems, selectedIndex: selectedMentionIndex, position: mentionPosition, query: mentionQuery, init: initMentions, handleKeyDown: handleMentionKeydown, close: closeMentionPopup } = useMentions({
+  maxResults: 8,
+  searchFn: async (q) => {
+    // Mock search - in real app, fetch from API
+    const mockItems: MentionItem[] = [
+      { id: 'page-1', type: 'page', title: 'Getting Started', subtitle: '/docs/start', icon: 'lucide:file-text' },
+      { id: 'page-2', type: 'page', title: 'API Reference', subtitle: '/docs/api', icon: 'lucide:code' },
+      { id: 'today', type: 'date', title: 'Today', subtitle: new Date().toLocaleDateString(), icon: 'lucide:calendar' },
+      { id: 'tomorrow', type: 'date', title: 'Tomorrow', subtitle: 'Next day', icon: 'lucide:calendar' }
+    ]
+    if (!q) return mockItems
+    return mockItems.filter(item => 
+      item.title.toLowerCase().includes(q.toLowerCase()) ||
+      item.subtitle?.toLowerCase().includes(q.toLowerCase())
+    )
+  }
+})
 
 const slashCommands = [
   { type: 'heading', label: 'Heading 1', icon: 'h1', shortcut: '# ' },
@@ -125,6 +147,12 @@ const deleteBlock = (id: string) => {
 }
 
 const handleKeydown = (e: KeyboardEvent, block: Block, index: number) => {
+  // Handle mention popup keys
+  if (showMentionPopup.value) {
+    const handled = handleMentionKeydown(e)
+    if (handled) return
+  }
+
   if (showSlashMenu.value) {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -159,6 +187,15 @@ const handleKeydown = (e: KeyboardEvent, block: Block, index: number) => {
   } else if (e.key === '/' && block.content === '') {
     showSlashMenu.value = true
     selectedBlockIndex.value = 0
+  } else if (e.key === '@') {
+    // Trigger mention popup
+    const selection = window.getSelection()
+    if (selection) {
+      const range = selection.getRangeAt(0)
+      const rect = range.getBoundingClientRect()
+      mentionPosition.value = { x: rect.left, y: rect.bottom + 8 }
+      showMentionPopup.value = true
+    }
   }
 }
 
@@ -171,13 +208,29 @@ const getBlockPlaceholder = (block: Block): string => {
     case 'todo': return 'To-do'
     case 'image': return 'Add a caption'
     case 'divider': return ''
-    default: return "Type '/' for commands"
+    default: return "Type '/' for commands, '@' to mention"
   }
 }
+
+const handleMentionSelect = (item: MentionItem) => {
+  // Insert mention into active block
+  const activeBlock = blocks.value.find(b => b.id === activeBlockId.value)
+  if (activeBlock) {
+    activeBlock.content += `[${item.title}](mention:${item.id}) `
+    syncToMarkdown()
+  }
+  closeMentionPopup()
+}
+
+onMounted(() => {
+  if (editorRef.value) {
+    initMentions(editorRef.value)
+  }
+})
 </script>
 
 <template>
-  <div class="wmarkdown-editor">
+  <div ref="editorRef" class="wmarkdown-editor">
     <div class="blocks">
       <div
         v-for="(block, index) in blocks"
@@ -250,6 +303,17 @@ const getBlockPlaceholder = (block: Block): string => {
         </div>
       </div>
     </div>
+
+    <!-- Mention Popup -->
+    <MentionPopup
+      v-if="showMentionPopup"
+      :items="mentionItems"
+      :selected-index="selectedMentionIndex"
+      :position="mentionPosition"
+      :query="mentionQuery"
+      @select="handleMentionSelect"
+      @close="closeMentionPopup"
+    />
   </div>
 </template>
 
