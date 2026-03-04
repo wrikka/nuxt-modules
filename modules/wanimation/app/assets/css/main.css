@@ -1,0 +1,18 @@
+@import 'uno.css';
+
+/* Animation utilities */
+.w-animate {
+  will-change: transform, opacity;
+}
+
+.w-animate-fast {
+  --animation-duration: 150ms;
+}
+
+.w-animate-normal {
+  --animation-duration: 300ms;
+}
+
+.w-animate-slow {
+  --animation-duration: 500ms;
+}

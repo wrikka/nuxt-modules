@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+@import 'katex/dist/katex.min.css';
+
+:root {
+  --docs-sidebar-width: 16rem;
+  --docs-header-height: 4rem;
+  --docs-toc-width: 16rem;
+  
+  /* Colors */
+  --docs-primary: #3b82f6;
+  --docs-primary-light: #60a5fa;
+  --docs-primary-dark: #2563eb;
+  
+  /* Light theme */
+  --docs-bg: #ffffff;
+  --docs-bg-secondary: #f9fafb;
+  --docs-bg-tertiary: #f3f4f6;
+  --docs-text: #111827;
+  --docs-text-secondary: #4b5563;
+  --docs-text-tertiary: #6b7280;
+  --docs-border: #e5e7eb;
+  --docs-border-light: #f3f4f6;
+}
+
+.dark {
+  --docs-bg: #0f172a;
+  --docs-bg-secondary: #1e293b;
+  --docs-bg-tertiary: #334155;
+  --docs-text: #f8fafc;
+  --docs-text-secondary: #cbd5e1;
+  --docs-text-tertiary: #94a3b8;
+  --docs-border: #334155;
+  --docs-border-light: #1e293b;
+}
+
+.docs-main {
+  margin-left: var(--docs-sidebar-width);
+  padding-top: var(--docs-header-height);
+  min-height: 100vh;
+}
+
+.docs-content {
+  max-width: 75ch;
+  margin: 0 auto;
+  padding: 2rem 2.5rem;
+}
+
+/* Typography */
+.prose h1 { @apply text-4xl font-bold mb-6; }
+.prose h2 { @apply text-2xl font-semibold mt-10 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700; }
+.prose h3 { @apply text-xl font-semibold mt-8 mb-3; }
+.prose p { @apply my-4 leading-7; }
+.prose ul { @apply list-disc pl-6 my-4 space-y-2; }
+.prose ol { @apply list-decimal pl-6 my-4 space-y-2; }
+.prose a { @apply text-blue-600 dark:text-blue-400 hover:underline; }
+.prose code { @apply px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-sm font-mono; }
+.prose pre { @apply p-4 rounded-lg bg-gray-900 dark:bg-gray-950 overflow-x-auto my-4; }
+.prose pre code { @apply p-0 bg-transparent text-gray-100; }
+.prose blockquote { @apply pl-4 border-l-4 border-gray-300 dark:border-gray-600 italic my-4; }
+.prose hr { @apply my-8 border-gray-200 dark:border-gray-700; }
+.prose table { @apply w-full my-4 border-collapse; }
+.prose th { @apply px-4 py-2 text-left font-semibold bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700; }
+.prose td { @apply px-4 py-2 border border-gray-200 dark:border-gray-700; }
+
+/* Custom Components */
+.docs-hero { @apply relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 py-20 px-4; }
+.docs-hero-content { @apply max-w-4xl mx-auto text-center; }
+.docs-hero-title { @apply text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent; }
+.docs-hero-description { @apply text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8; }
+.docs-hero-actions { @apply flex flex-wrap justify-center gap-4; }
+
+.docs-feature-grid { @apply grid md:grid-cols-3 gap-6 my-12; }
+.docs-feature-card { @apply p-6 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow; }
+.docs-feature-icon { @apply w-12 h-12 mb-4 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400; }
+.docs-feature-title { @apply text-lg font-semibold mb-2; }
+.docs-feature-desc { @apply text-gray-600 dark:text-gray-400 text-sm; }
+
+.docs-team-grid { @apply grid md:grid-cols-4 gap-6 my-12; }
+.docs-team-card { @apply text-center p-4; }
+.docs-team-avatar { @apply w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 dark:bg-gray-700; }
+.docs-team-name { @apply font-semibold; }
+.docs-team-role { @apply text-sm text-gray-600 dark:text-gray-400; }
+
+/* Code Blocks */
+.docs-code-block { @apply relative my-4 rounded-lg overflow-hidden; }
+.docs-code-header { @apply flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 border-b border-gray-700; }
+.docs-code-lang { @apply text-xs text-gray-400 uppercase; }
+.docs-code-copy { @apply p-1 rounded hover:bg-gray-700 transition-colors; }
+
+.docs-code-group { @apply my-4 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700; }
+.docs-code-tabs { @apply flex bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700; }
+.docs-code-tab { @apply px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors; }
+.docs-code-tab-active { @apply text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-white dark:bg-gray-900; }
+
+/* Badges */
+.docs-badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium; }
+.docs-badge-stable { @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400; }
+.docs-badge-beta { @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400; }
+.docs-badge-new { @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400; }
+.docs-badge-deprecated { @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400; }
+
+/* Outline / TOC */
+.docs-outline { @apply fixed right-0 top-20 w-64 px-4 py-2; }
+.docs-outline-list { @apply space-y-1 text-sm; }
+.docs-outline-link { @apply block py-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors; }
+.docs-outline-link-h2 { @apply pl-0; }
+.docs-outline-link-h3 { @apply pl-4; }
+.docs-outline-link-active { @apply text-blue-600 dark:text-blue-400 font-medium; }
+
+/* Search */
+.docs-search { @apply relative; }
+.docs-search-input { @apply w-full px-4 py-2 pl-10 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500; }
+.docs-search-icon { @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400; }
+.docs-search-results { @apply absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto; }
+.docs-search-result { @apply px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0; }
+.docs-search-result-title { @apply font-medium text-sm; }
+.docs-search-result-excerpt { @apply text-xs text-gray-500 dark:text-gray-400 mt-1; }
+
+/* Edit Link */
+.docs-edit-link { @apply inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors; }
+
+/* Prev/Next Links */
+.docs-prev-next { @apply grid grid-cols-2 gap-4 mt-12 pt-8 border-t border-gray-200 dark:border-gray-700; }
+.docs-prev { @apply text-left; }
+.docs-next { @apply text-right; }
+.docs-prev-next-link { @apply group flex flex-col gap-1 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors; }
+.docs-prev-next-label { @apply text-xs text-gray-500 dark:text-gray-400; }
+.docs-prev-next-title { @apply font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400; }
+
+/* Last Updated */
+.docs-last-updated { @apply text-xs text-gray-500 dark:text-gray-400 mt-8 pt-4 border-t border-gray-200 dark:border-gray-700; }
+
+/* Carbon Ads */
+.docs-carbon { @apply fixed bottom-4 right-4 w-64; }
+
+/* Social Links */
+.docs-social { @apply flex items-center gap-3; }
+.docs-social-link { @apply p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors; }
+
+/* Mermaid */
+.docs-mermaid { @apply my-4 flex justify-center; }
+
+/* Math */
+.docs-math { @apply my-4 overflow-x-auto; }
+
+/* Embeds */
+.docs-embed { @apply my-4 rounded-lg overflow-hidden; }
+.docs-embed-youtube { @apply aspect-video; }
+
+/* Copy Button */
+.docs-copy-btn { @apply absolute top-2 right-2 p-1.5 rounded bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 transition-colors; }
+.docs-copy-btn-copied { @apply text-green-400; }
+
+/* Keyboard Shortcut */
+.docs-kbd { @apply inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-xs font-mono text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700; }
+
+/* Mobile */
+@media (max-width: 1024px) {
+  .docs-main { margin-left: 0; }
+  .docs-outline { display: none; }
+}
+
+@media (max-width: 768px) {
+  .docs-content { padding: 1.5rem; }
+  .docs-hero-title { @apply text-3xl; }
+  .docs-hero-description { @apply text-lg; }
+}

@@ -1,0 +1,16 @@
+node_modules
+*.log
+.nuxt
+.nitro
+.cache
+.output
+.env
+.env.local
+.env.*.local
+dist
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

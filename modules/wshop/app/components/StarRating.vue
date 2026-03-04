@@ -37,11 +37,11 @@ const getStarClass = (star: number) => {
   const half = star === Math.ceil(displayRating.value) && displayRating.value % 1 !== 0
   
   if (filled) {
-    return 'text-yellow-400'
+    return 'text-warning-400'
   } else if (half) {
-    return 'text-yellow-200'
+    return 'text-warning-200'
   } else {
-    return 'text-gray-300'
+    return 'text-secondary-300'
   }
 }
 
@@ -77,31 +77,44 @@ const handleMouseLeave = () => {
 </script>
 
 <template>
-
-  <div class="flex items-center" :class="containerClass">
+  <div 
+    class="flex items-center gap-1" 
+    :class="containerClass"
+    role="img"
+    :aria-label="`Rating: ${rating} out of 5 stars`"
+  >
     <button
       v-for="star in 5"
       :key="star"
       type="button"
       :class="[
-        'transition-colors duration-200',
-        interactive ? 'hover:scale-110 cursor-pointer' : 'cursor-default'
+        'transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-warning-500 focus-visible:ring-offset-2 rounded',
+        interactive ? 'hover:scale-110 cursor-pointer' : 'cursor-default',
+        star <= Math.floor(displayRating.value) ? 'text-warning-400' : 'text-secondary-300'
       ]"
       :disabled="!interactive"
+      :aria-label="`Rate ${star} stars`"
       @click="handleClick(star)"
       @mouseenter="handleMouseEnter(star)"
       @mouseleave="handleMouseLeave"
     >
-      <NuxtIcon
-        :name="getStarFill(star) === 'none' ? 'i-mdi-star-outline' : 'i-mdi-star'"
-        :size="String(size)"
-        :class="getStarClass(star)"
-      />
+      <svg
+        :width="size"
+        :height="size"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
     </button>
     
-    <span v-if="showCount" class="ml-2 text-sm text-gray-600">
+    <span 
+      v-if="showCount" 
+      class="ml-2 text-sm text-secondary-600"
+      aria-label="Number of ratings"
+    >
       ({{ count || ratingCount }})
     </span>
   </div>
-
 </template>

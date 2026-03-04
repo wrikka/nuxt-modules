@@ -1,0 +1,313 @@
+/*
+ * WMarkdown Design System
+ * Modern, accessible, and beautiful UI components
+ */
+
+:root {
+  /* Primary Colors */
+  --wmd-primary-50: #eff6ff;
+  --wmd-primary-100: #dbeafe;
+  --wmd-primary-200: #bfdbfe;
+  --wmd-primary-300: #93c5fd;
+  --wmd-primary-400: #60a5fa;
+  --wmd-primary-500: #3b82f6;
+  --wmd-primary-600: #2563eb;
+  --wmd-primary-700: #1d4ed8;
+  --wmd-primary-800: #1e40af;
+  --wmd-primary-900: #1e3a8a;
+
+  /* Gray Scale */
+  --wmd-gray-50: #f9fafb;
+  --wmd-gray-100: #f3f4f6;
+  --wmd-gray-200: #e5e7eb;
+  --wmd-gray-300: #d1d5db;
+  --wmd-gray-400: #9ca3af;
+  --wmd-gray-500: #6b7280;
+  --wmd-gray-600: #4b5563;
+  --wmd-gray-700: #374151;
+  --wmd-gray-800: #1f2937;
+  --wmd-gray-900: #111827;
+
+  /* Semantic Colors */
+  --wmd-success-50: #f0fdf4;
+  --wmd-success-100: #dcfce7;
+  --wmd-success-500: #22c55e;
+  --wmd-success-600: #16a34a;
+  --wmd-success-700: #15803d;
+
+  --wmd-warning-50: #fffbeb;
+  --wmd-warning-100: #fef3c7;
+  --wmd-warning-500: #f59e0b;
+  --wmd-warning-600: #d97706;
+  --wmd-warning-700: #b45309;
+
+  --wmd-danger-50: #fef2f2;
+  --wmd-danger-100: #fee2e2;
+  --wmd-danger-500: #ef4444;
+  --wmd-danger-600: #dc2626;
+  --wmd-danger-700: #b91c1c;
+
+  --wmd-info-50: #f0f9ff;
+  --wmd-info-100: #e0f2fe;
+  --wmd-info-500: #0ea5e9;
+  --wmd-info-600: #0284c7;
+  --wmd-info-700: #0369a1;
+
+  /* Background Colors */
+  --wmd-bg-primary: #ffffff;
+  --wmd-bg-secondary: #f9fafb;
+  --wmd-bg-tertiary: #f3f4f6;
+  --wmd-bg-elevated: #ffffff;
+
+  /* Text Colors */
+  --wmd-text-primary: #111827;
+  --wmd-text-secondary: #4b5563;
+  --wmd-text-tertiary: #6b7280;
+  --wmd-text-muted: #9ca3af;
+  --wmd-text-inverse: #ffffff;
+
+  /* Border Colors */
+  --wmd-border-light: #e5e7eb;
+  --wmd-border-default: #d1d5db;
+  --wmd-border-strong: #9ca3af;
+
+  /* Spacing Scale */
+  --wmd-space-1: 0.25rem;
+  --wmd-space-2: 0.5rem;
+  --wmd-space-3: 0.75rem;
+  --wmd-space-4: 1rem;
+  --wmd-space-5: 1.25rem;
+  --wmd-space-6: 1.5rem;
+  --wmd-space-8: 2rem;
+  --wmd-space-10: 2.5rem;
+  --wmd-space-12: 3rem;
+  --wmd-space-16: 4rem;
+  --wmd-space-20: 5rem;
+
+  /* Typography */
+  --wmd-font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --wmd-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --wmd-text-xs: 0.75rem;
+  --wmd-text-sm: 0.875rem;
+  --wmd-text-base: 1rem;
+  --wmd-text-lg: 1.125rem;
+  --wmd-text-xl: 1.25rem;
+  --wmd-text-2xl: 1.5rem;
+  --wmd-text-3xl: 1.875rem;
+  --wmd-text-4xl: 2.25rem;
+
+  --wmd-leading-tight: 1.25;
+  --wmd-leading-normal: 1.5;
+  --wmd-leading-relaxed: 1.625;
+  --wmd-leading-loose: 2;
+
+  /* Border Radius */
+  --wmd-radius-sm: 0.25rem;
+  --wmd-radius-md: 0.375rem;
+  --wmd-radius-lg: 0.5rem;
+  --wmd-radius-xl: 0.75rem;
+  --wmd-radius-2xl: 1rem;
+  --wmd-radius-full: 9999px;
+
+  /* Shadows */
+  --wmd-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --wmd-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --wmd-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --wmd-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --wmd-shadow-glow: 0 0 20px rgb(59 130 246 / 0.3);
+
+  /* Transitions */
+  --wmd-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --wmd-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --wmd-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --wmd-transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-Index Scale */
+  --wmd-z-base: 0;
+  --wmd-z-dropdown: 100;
+  --wmd-z-sticky: 200;
+  --wmd-z-fixed: 300;
+  --wmd-z-modal-backdrop: 400;
+  --wmd-z-modal: 500;
+  --wmd-z-popover: 600;
+  --wmd-z-tooltip: 700;
+  --wmd-z-toast: 800;
+
+  /* Focus Ring */
+  --wmd-focus-ring: 0 0 0 3px rgb(59 130 246 / 0.4);
+  --wmd-focus-ring-offset: 2px;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --wmd-bg-primary: #0f172a;
+  --wmd-bg-secondary: #1e293b;
+  --wmd-bg-tertiary: #334155;
+  --wmd-bg-elevated: #1e293b;
+
+  --wmd-text-primary: #f8fafc;
+  --wmd-text-secondary: #cbd5e1;
+  --wmd-text-tertiary: #94a3b8;
+  --wmd-text-muted: #64748b;
+  --wmd-text-inverse: #0f172a;
+
+  --wmd-border-light: #334155;
+  --wmd-border-default: #475569;
+  --wmd-border-strong: #64748b;
+
+  --wmd-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --wmd-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --wmd-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --wmd-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --wmd-shadow-glow: 0 0 20px rgb(59 130 246 / 0.2);
+
+  --wmd-focus-ring: 0 0 0 3px rgb(96 165 250 / 0.4);
+}
+
+/* Animation Keyframes */
+@keyframes wmd-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes wmd-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wmd-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wmd-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wmd-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wmd-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wmd-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes wmd-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes wmd-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes wmd-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Utility Classes */
+.wmd-animate-fade-in {
+  animation: wmd-fade-in var(--wmd-transition-base);
+}
+
+.wmd-animate-fade-in-up {
+  animation: wmd-fade-in-up var(--wmd-transition-base);
+}
+
+.wmd-animate-scale-in {
+  animation: wmd-scale-in var(--wmd-transition-spring);
+}
+
+.wmd-animate-slide-in-right {
+  animation: wmd-slide-in-right var(--wmd-transition-base);
+}
+
+.wmd-animate-pulse {
+  animation: wmd-pulse 2s ease-in-out infinite;
+}
+
+.wmd-animate-spin {
+  animation: wmd-spin 1s linear infinite;
+}
+
+.wmd-animate-bounce {
+  animation: wmd-bounce 1s ease-in-out infinite;
+}
+
+/* Focus Styles */
+.wmd-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--wmd-focus-ring);
+}
+
+/* Scrollbar Styling */
+.wmd-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.wmd-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wmd-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--wmd-border-strong);
+  border-radius: var(--wmd-radius-full);
+}
+
+.wmd-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--wmd-text-muted);
+}
+
+/* Selection */
+::selection {
+  background: var(--wmd-primary-200);
+  color: var(--wmd-primary-900);
+}
+
+[data-theme="dark"] ::selection {
+  background: var(--wmd-primary-800);
+  color: var(--wmd-primary-100);
+}

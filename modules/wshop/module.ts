@@ -96,6 +96,7 @@ export default defineNuxtModule<ModuleOptions>({
 
 		// Add composables
 		nuxt.hook("app:resolve", (app) => {
+			// Core composables
 			app.composables.push({
 				name: "useWShop",
 				path: resolver.resolve("./app/composables/useWShop"),
@@ -111,6 +112,108 @@ export default defineNuxtModule<ModuleOptions>({
 			app.composables.push({
 				name: "useOrders",
 				path: resolver.resolve("./app/composables/useOrders"),
+			})
+
+			// AI & Smart Features
+			app.composables.push({
+				name: "useAIRecommendations",
+				path: resolver.resolve("./app/composables/useAIRecommendations"),
+			})
+			app.composables.push({
+				name: "useAISearch",
+				path: resolver.resolve("./app/composables/useAISearch"),
+			})
+			app.composables.push({
+				name: "usePredictiveAnalytics",
+				path: resolver.resolve("./app/composables/usePredictiveAnalytics"),
+			})
+			app.composables.push({
+				name: "useShopChatbot",
+				path: resolver.resolve("./app/composables/useShopChatbot"),
+			})
+
+			// Advanced Features
+			app.composables.push({
+				name: "useAbandonedCart",
+				path: resolver.resolve("./app/composables/useAbandonedCart"),
+			})
+			app.composables.push({
+				name: "useInventorySync",
+				path: resolver.resolve("./app/composables/useInventorySync"),
+			})
+			app.composables.push({
+				name: "useVendorMarketplace",
+				path: resolver.resolve("./app/composables/useVendorMarketplace"),
+			})
+
+			// Emerging Tech
+			app.composables.push({
+				name: "useARPreview",
+				path: resolver.resolve("./app/composables/useARPreview"),
+			})
+			app.composables.push({
+				name: "useVoiceCommerce",
+				path: resolver.resolve("./app/composables/useVoiceCommerce"),
+			})
+			app.composables.push({
+				name: "useSocialCommerce",
+				path: resolver.resolve("./app/composables/useSocialCommerce"),
+			})
+			app.composables.push({
+				name: "useLiveShopping",
+				path: resolver.resolve("./app/composables/useLiveShopping"),
+			})
+
+			// Financial & Payments
+			app.composables.push({
+				name: "useBNPL",
+				path: resolver.resolve("./app/composables/useBNPL"),
+			})
+			app.composables.push({
+				name: "useQRCheckout",
+				path: resolver.resolve("./app/composables/useQRCheckout"),
+			})
+			app.composables.push({
+				name: "useGiftCards",
+				path: resolver.resolve("./app/composables/useGiftCards"),
+			})
+			app.composables.push({
+				name: "useProductBundles",
+				path: resolver.resolve("./app/composables/useProductBundles"),
+			})
+
+			// Integrations
+			app.composables.push({
+				name: "useAccountingSync",
+				path: resolver.resolve("./app/composables/useAccountingSync"),
+			})
+
+			// Product Management
+			app.composables.push({
+				name: "useProductComparison",
+				path: resolver.resolve("./app/composables/useProductComparison"),
+			})
+			app.composables.push({
+				name: "useProductImportExport",
+				path: resolver.resolve("./app/composables/useProductImportExport"),
+			})
+			app.composables.push({
+				name: "useBulkPriceEditor",
+				path: resolver.resolve("./app/composables/useBulkPriceEditor"),
+			})
+			app.composables.push({
+				name: "useWaitlist",
+				path: resolver.resolve("./app/composables/useWaitlist"),
+			})
+
+			// Marketing
+			app.composables.push({
+				name: "useCustomerSegments",
+				path: resolver.resolve("./app/composables/useCustomerSegments"),
+			})
+			app.composables.push({
+				name: "useAffiliateSystem",
+				path: resolver.resolve("./app/composables/useAffiliateSystem"),
 			})
 		})
 

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "#app": ["./node_modules/nuxt/dist/app"],
+      "@/*": ["./app/*"]
+    }
+  },
+  "include": ["./app/**/*", "./module.ts"],
+  "exclude": ["node_modules", "dist"]
+}

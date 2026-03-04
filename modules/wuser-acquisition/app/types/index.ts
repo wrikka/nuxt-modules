@@ -5,6 +5,11 @@ export interface ModuleOptions {
 	analytics?: AnalyticsOptions
 	notifications?: NotificationOptions
 	api?: ApiOptions
+	doubleSidedRewards?: DoubleSidedRewardsOptions
+	referralContests?: ReferralContestsOptions
+	smartMatching?: SmartMatchingOptions
+	affiliateCoupons?: AffiliateCouponsOptions
+	retargeting?: RetargetingOptions
 }
 
 export interface ReferralOptions {
@@ -44,6 +49,53 @@ export interface RewardsOptions {
 	tierRequirements?: number[]
 	bonusMultiplier?: number
 	gamification?: boolean
+}
+
+export interface DoubleSidedRewardsOptions {
+	enabled: boolean
+	referrerReward: {
+		type: "points" | "credits" | "cash" | "discount"
+		amount: number
+		minPurchase?: number
+	}
+	refereeReward: {
+		type: "points" | "credits" | "cash" | "discount"
+		amount: number
+		welcomeBonus?: boolean
+	}
+	milestoneRewards?: {
+		milestone: number
+		bonusAmount: number
+	}[]
+}
+
+export interface ReferralContestsOptions {
+	enabled: boolean
+	autoStart?: boolean
+	defaultDuration?: number
+	minParticipants?: number
+}
+
+export interface SmartMatchingOptions {
+	enabled: boolean
+	minMatchScore?: number
+	autoSuggest?: boolean
+	maxSuggestions?: number
+}
+
+export interface AffiliateCouponsOptions {
+	enabled: boolean
+	allowCustomCodes?: boolean
+	maxCouponsPerAffiliate?: number
+	defaultDiscountType?: "percentage" | "fixed_amount"
+	defaultDiscountValue?: number
+}
+
+export interface RetargetingOptions {
+	enabled: boolean
+	defaultDelay?: number
+	maxRetries?: number
+	trackFunnelStages?: boolean
 }
 
 export interface AnalyticsOptions {
@@ -239,3 +291,6 @@ export interface RewardStats {
 	rewardDistribution: Record<string, number>
 	tierDistribution: Record<number, number>
 }
+
+export * from "./new-features"
+

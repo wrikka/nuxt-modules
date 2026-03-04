@@ -26,13 +26,13 @@ useHead({
   <div class="space-y-8">
     <h1 class="text-3xl font-bold text-white">My Tasks</h1>
     <div v-if="isLoading">
-      <LoadingIndicator />
+      <AtomsSpinner class="w-8 h-8 mx-auto" />
     </div>
     <div v-else-if="filteredTasks.length > 0">
       <TaskList :title="`Tasks assigned to ${currentUser}`" :tasks="filteredTasks" />
     </div>
     <div v-else>
-      <EmptyState
+      <AtomsEmpty
         title="No tasks assigned to you"
         message="You have no tasks assigned to you at the moment."
         icon="mdi:check-circle-outline"

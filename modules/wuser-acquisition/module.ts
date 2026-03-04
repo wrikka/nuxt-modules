@@ -24,6 +24,24 @@ const userAcquisitionModuleOptionsSchema = z.object({
 		trackConversions: z.boolean().default(true),
 	}).optional(),
 
+	doubleSidedRewards: z.object({
+		enabled: z.boolean().default(false),
+		referrerReward: z.object({
+			type: z.enum(["points", "credits", "cash", "discount"]).default("points"),
+			amount: z.number().min(0).default(100),
+			minPurchase: z.number().optional(),
+		}),
+		refereeReward: z.object({
+			type: z.enum(["points", "credits", "cash", "discount"]).default("points"),
+			amount: z.number().min(0).default(50),
+			welcomeBonus: z.boolean().default(true),
+		}),
+		milestoneRewards: z.array(z.object({
+			milestone: z.number(),
+			bonusAmount: z.number(),
+		})).optional(),
+	}).optional(),
+
 	affiliate: z.object({
 		enabled: z.boolean().default(true),
 		autoApprove: z.boolean().default(false),
@@ -37,6 +55,14 @@ const userAcquisitionModuleOptionsSchema = z.object({
 		performanceThreshold: z.number().min(0).max(1).default(0.05),
 	}).optional(),
 
+	affiliateCoupons: z.object({
+		enabled: z.boolean().default(false),
+		allowCustomCodes: z.boolean().default(true),
+		maxCouponsPerAffiliate: z.number().min(1).default(10),
+		defaultDiscountType: z.enum(["percentage", "fixed_amount"]).default("percentage"),
+		defaultDiscountValue: z.number().min(0).default(10),
+	}).optional(),
+
 	rewards: z.object({
 		enabled: z.boolean().default(true),
 		expirationDays: z.number().min(1).default(365),
@@ -47,6 +73,27 @@ const userAcquisitionModuleOptionsSchema = z.object({
 		tierRequirements: z.array(z.number()).default([0, 1000, 5000, 20000, 50000]),
 		bonusMultiplier: z.number().min(1).max(5).default(1),
 		gamification: z.boolean().default(true),
+	}).optional(),
+
+	referralContests: z.object({
+		enabled: z.boolean().default(false),
+		autoStart: z.boolean().default(false),
+		defaultDuration: z.number().min(1).default(30),
+		minParticipants: z.number().min(1).default(3),
+	}).optional(),
+
+	smartMatching: z.object({
+		enabled: z.boolean().default(false),
+		minMatchScore: z.number().min(0).max(100).default(70),
+		autoSuggest: z.boolean().default(true),
+		maxSuggestions: z.number().min(1).default(10),
+	}).optional(),
+
+	retargeting: z.object({
+		enabled: z.boolean().default(false),
+		defaultDelay: z.number().min(1).default(24),
+		maxRetries: z.number().min(1).default(3),
+		trackFunnelStages: z.boolean().default(true),
 	}).optional(),
 
 	analytics: z.object({
@@ -134,6 +181,26 @@ export default defineNuxtModule<ModuleOptions>({
 
 		if (validatedOptions.notifications?.enabled) {
 			logger.info("Notifications enabled")
+		}
+
+		if (validatedOptions.doubleSidedRewards?.enabled) {
+			logger.info("Double-sided rewards enabled")
+		}
+
+		if (validatedOptions.referralContests?.enabled) {
+			logger.info("Referral contests enabled")
+		}
+
+		if (validatedOptions.smartMatching?.enabled) {
+			logger.info("Smart referral matching enabled")
+		}
+
+		if (validatedOptions.affiliateCoupons?.enabled) {
+			logger.info("Affiliate coupons enabled")
+		}
+
+		if (validatedOptions.retargeting?.enabled) {
+			logger.info("Referral retargeting enabled")
 		}
 	},
 })

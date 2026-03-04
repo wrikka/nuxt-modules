@@ -1,3 +1,4 @@
+import { defineNuxtConfig } from 'nuxt/config';
 import checker from "vite-plugin-checker";
 
 export default defineNuxtConfig({
@@ -33,6 +34,8 @@ export default defineNuxtConfig({
 		theme: "moon",
 	},
 	typescript: {
+		strict: true,
+		typeCheck: true,
 		tsConfig: {
 			compilerOptions: {
 				moduleResolution: "bundler",

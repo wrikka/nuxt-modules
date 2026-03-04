@@ -1,11 +1,15 @@
 import { defineNuxtConfig } from "nuxt/config";
-import checker from "vite-plugin-checker";
 
 export default defineNuxtConfig({
   preset: 'bun',
 	compatibilityDate: "latest",
 	devtools: { enabled: true },
 	modules: [
+		"@wrikka/wvideo",
+		"@wrikka/waudio",
+		"@wrikka/wdesigner",
+		"@wrikka/wmedia-library",
+		"@wrikka/wrecorder",
 		"@vue-macros/nuxt",
 		"@nuxtjs/color-mode",
 		"@vueuse/nuxt",

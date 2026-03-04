@@ -1,48 +1,38 @@
 {
   "author": "WAI Team",
   "dependencies": {
+    "@nuxt/kit": "^4.3.1",
     "@vueuse/core": "^14.2.1",
+    "@wrikka/wui": "workspace:*",
+    "defu": "^6.1.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.29"
   },
-  "description": "Chat module with comprehensive chat functionality - refactored as independent package",
+  "description": "Telegram-like chat module with 33+ features - E2EE, Voice/Video calls, Bots, Channels, Supergroups, Cloud sync",
   "exports": {
-    ".": "./src/index.ts",
-    "./components": "./src/components/index.ts",
-    "./components/atoms": "./src/components/atoms/index.ts",
-    "./components/molecules": "./src/components/molecules/index.ts",
-    "./components/organisms": "./src/components/organisms/index.ts",
-    "./composables": "./src/composables/index.ts",
-    "./composables/core": "./src/composables/core/index.ts",
-    "./composables/features": "./src/composables/features/index.ts",
-    "./composables/utils": "./src/composables/utils/index.ts",
-    "./stores": "./src/stores/index.ts",
-    "./stores/core": "./src/stores/core/index.ts",
-    "./stores/features": "./src/stores/features/index.ts",
-    "./stores/domain": "./src/stores/domain/index.ts",
-    "./types": "./src/types/index.ts",
-    "./types/core": "./src/types/core/index.ts",
-    "./types/domain": "./src/types/domain/index.ts",
-    "./services": "./src/services/index.ts",
-    "./services/api": "./src/services/api/index.ts",
-    "./services/export": "./src/services/export/index.ts",
-    "./utils": "./src/utils/index.ts",
-    "./utils/chat": "./src/utils/chat/index.ts",
-    "./utils/message": "./src/utils/message/index.ts",
-    "./utils/session": "./src/utils/session/index.ts",
-    "./config": "./src/config/index.ts",
-    "./plugins": "./src/plugins/index.ts"
+    ".": "./app/index.ts",
+    "./components": "./app/components/index.ts",
+    "./composables": "./app/composables/index.ts",
+    "./types": "./app/types/index.ts",
+    "./config": "./app/config/index.ts",
+    "./plugins": "./app/plugins/index.ts"
   },
   "keywords": [
     "vue",
     "nuxt",
     "chat",
     "messaging",
-    "ai"
+    "ai",
+    "telegram",
+    "e2ee",
+    "voice",
+    "video",
+    "calls",
+    "bots"
   ],
   "license": "MIT",
-  "main": "src/index.ts",
-  "name": "wchat",
+  "main": "./app/index.ts",
+  "name": "@wrikka/wchat",
   "overrides": {
     "vite": "npm:rolldown-vite@latest"
   },
@@ -54,10 +44,11 @@
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt-build-module",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix",
+    "lint": "nuxt typecheck",
     "release": "release-it",
-    "test": "vitest"
+    "test": "vitest",
+    "postinstall": "nuxt prepare"
   },
-  "types": "src/index.ts",
+  "types": "./app/index.ts",
   "version": "1.0.0"
 }

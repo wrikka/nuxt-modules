@@ -1,64 +1,131 @@
 import { addComponentsDir, addImportsDir, addPlugin, createResolver, defineNuxtModule, useLogger } from "@nuxt/kit";
-import type { NuxtModule } from "@nuxt/schema";
+import type { Nuxt } from "@nuxt/schema";
 import { defu } from "defu";
+import type { ContentConfig } from "./src/runtime/shared/types/collection";
+import { loadContentConfig, indexContent } from "./src/runtime/server/utils/indexer";
+import { createDatabase } from "./src/runtime/server/utils/database";
+import { generateTypes } from "./src/runtime/server/utils/types-generator";
 
-export const defineCollection = (config: any) => config;
-export const defineContentConfig = (config: any) => config;
+export { defineCollection, defineContentConfig } from "./src/runtime/shared/utils/collection";
 
-export default defineNuxtModule({
-	meta: {
-		name: "@wrikka/content",
-		configKey: "content",
-		compatibility: {
-			nuxt: "^4.0.0",
-		},
-	},
-	defaults: {
-		contentDirs: ["content"],
-		watch: true,
-		highlight: true,
-		markdown: {
-			breaks: true,
-			linkify: true,
-			typographer: true,
-		},
-	},
-	setup(_options: any, nuxt: any) {
-		const resolver = createResolver(import.meta.url);
-		const logger = useLogger("@wrikka/content");
+export interface ModuleOptions {
+  contentDirs?: string[];
+  watch?: boolean;
+  highlight?: boolean;
+  database?: {
+    type: "sqlite" | "memory";
+    path?: string;
+  };
+  markdown?: {
+    breaks?: boolean;
+    linkify?: boolean;
+    typographer?: boolean;
+  };
+  search?: {
+    enabled?: boolean;
+    fuzzy?: boolean;
+    threshold?: number;
+  };
+  sitemap?: {
+    enabled?: boolean;
+    hostname?: string;
+  };
+  rss?: {
+    enabled?: boolean;
+    title?: string;
+    description?: string;
+  };
+}
 
-		// Merge user options with defaults
-		const config = defu(nuxt.options.runtimeConfig.public.content, options);
+export default defineNuxtModule<ModuleOptions>({
+  meta: {
+    name: "@wrikka/wcontent",
+    configKey: "wcontent",
+    compatibility: {
+      nuxt: "^4.0.0",
+    },
+    dependencies: ["@wrikka/wmarkdown"],
+  },
+  defaults: {
+    contentDirs: ["content"],
+    watch: true,
+    highlight: true,
+    database: {
+      type: "sqlite",
+      path: ".data/content.db",
+    },
+    markdown: {
+      breaks: true,
+      linkify: true,
+      typographer: true,
+    },
+    search: {
+      enabled: true,
+      fuzzy: true,
+      threshold: 0.4,
+    },
+    sitemap: {
+      enabled: true,
+    },
+    rss: {
+      enabled: true,
+    },
+  },
+  async setup(options, nuxt) {
+    const resolver = createResolver(import.meta.url);
+    const logger = useLogger("@wrikka/wcontent");
 
-		// Add runtime config
-		nuxt.options.runtimeConfig.public.content = config;
+    const contentConfig = await loadContentConfig(nuxt.options.rootDir);
+    const db = createDatabase(options.database!);
+    
+    nuxt.hook("build:before", async () => {
+      await indexContent(db, contentConfig, options.contentDirs!, nuxt.options.rootDir);
+      logger.success("Content indexed successfully");
+    });
 
-		// Register runtime directory
-		nuxt.options.alias["#content"] = resolver.resolve("./runtime");
+    nuxt.hook("builder:watch", async (event, path) => {
+      if (path.includes("content/")) {
+        await indexContent(db, contentConfig, options.contentDirs!, nuxt.options.rootDir);
+        logger.info(`Content re-indexed: ${path}`);
+      }
+    });
 
-		// Register types
-		nuxt.options.alias["#content/types"] = resolver.resolve("./app/shared/types/index");
+    nuxt.hook("prepare:types", async ({ references }) => {
+      await generateTypes(contentConfig, nuxt.options.buildDir);
+      references.push({
+        types: resolver.resolve("./src/runtime/types.d.ts"),
+      });
+    });
 
-		// Register composables
-		addImportsDir(resolver.resolve("./app/app/composables"));
+    nuxt.options.runtimeConfig.wcontent = defu(nuxt.options.runtimeConfig.wcontent, {
+      database: options.database,
+      search: options.search,
+    });
 
-		// Register components
-		addComponentsDir({
-			path: resolver.resolve("./app/app/components"),
-			prefix: "Content",
-		});
+    nuxt.options.alias["#wcontent/server"] = resolver.resolve("./src/runtime/server");
+    addImportsDir(resolver.resolve("./src/runtime/app/composables"));
+    addComponentsDir({
+      path: resolver.resolve("./src/runtime/app/components"),
+      prefix: "Content",
+    });
+    addPlugin(resolver.resolve("./src/runtime/app/plugins/content.ts"));
+    
+    if (options.sitemap?.enabled) {
+      nuxt.options.runtimeConfig.public.sitemap = defu(nuxt.options.runtimeConfig.public.sitemap, {
+        sources: ["/api/__sitemap__/content"],
+      });
+    }
+    
+    if (options.rss?.enabled) {
+      nuxt.hook("nitro:config", (nitroConfig) => {
+        nitroConfig.handlers = nitroConfig.handlers || [];
+        nitroConfig.handlers.push({
+          route: "/rss.xml",
+          handler: resolver.resolve("./src/runtime/server/routes/rss.ts"),
+        });
+      });
+    }
 
-		// Register plugins
-		addPlugin(resolver.resolve("./app/plugins/content.client"));
-		addPlugin(resolver.resolve("./app/plugins/content.server"));
-
-		// Add types
-		nuxt.hook("prepare:types", ({ references }) => {
-			references.push({
-				types: resolver.resolve("./types"),
-			});
-		});
-
-		logger.success("Content module loaded");
-	},
-}) as NuxtModule<any, any>;
+    logger.success("wcontent module loaded");
+  },
+});

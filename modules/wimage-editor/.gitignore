@@ -1,0 +1,9 @@
+node_modules
+.DS_Store
+ dist
+ .nuxt
+ .output
+ .data
+ .env
+.env.local
+*.log

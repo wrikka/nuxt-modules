@@ -1,0 +1,57 @@
+{
+  "name": "@wrikka/wgraphs",
+  "version": "0.2.0",
+  "description": "Nuxt module for graph algorithms and 40+ chart visualizations",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/module.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "nuxt",
+    "graphs",
+    "charts",
+    "algorithms",
+    "visualization",
+    "d3",
+    "typescript",
+    "vue"
+  ],
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "lint": "nuxt typecheck",
+    "release": "release-it",
+    "test": "vitest",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.3.1",
+    "d3": "^7.9.0",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^1.0.2",
+    "@types/d3": "^7.4.3",
+    "@types/node": "^20.0.0",
+    "@unocss/nuxt": "latest",
+    "nuxt": "^4.3.1",
+    "typescript": "^5.9.3",
+    "unocss": "latest",
+    "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.3.1"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  }
+}

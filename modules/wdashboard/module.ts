@@ -1,7 +1,9 @@
-import { defineNuxtModule, createResolver, addComponentsDir, addImportsDir } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addComponentsDir, addImportsDir, addPlugin } from '@nuxt/kit'
 
 export interface ModuleOptions {
   prefix?: string
+  defaultTab?: string
+  enableTheme?: boolean
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -13,7 +15,9 @@ export default defineNuxtModule<ModuleOptions>({
     }
   },
   defaults: {
-    prefix: 'W'
+    prefix: 'W',
+    defaultTab: 'profile',
+    enableTheme: true
   },
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)
@@ -31,7 +35,18 @@ export default defineNuxtModule<ModuleOptions>({
       pathPrefix: false
     })
 
+    addComponentsDir({
+      path: resolver.resolve('./runtime/components'),
+      prefix: options.prefix,
+      pathPrefix: false
+    })
+
     // Add composables
     addImportsDir(resolver.resolve('./runtime/composables'))
+
+    // Add theme plugin if enabled
+    if (options.enableTheme) {
+      addPlugin(resolver.resolve('./runtime/plugins/theme.client'))
+    }
   }
 })

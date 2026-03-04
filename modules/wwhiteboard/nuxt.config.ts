@@ -1,9 +1,7 @@
-import checker from 'vite-plugin-checker'
 import wasm from 'vite-plugin-wasm'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  preset: 'bun',
     compatibilityDate: "2025-12-17", 
     devtools: { enabled: true },
     modules: [
@@ -31,8 +29,8 @@ export default defineNuxtConfig({
     },
 
     typescript: {
-        typeCheck: true,
-        strict: true
+        strict: true,
+        typeCheck: true
     },
     vite: {
         server: {
@@ -43,16 +41,6 @@ export default defineNuxtConfig({
         },
         plugins: [
             wasm(),
-            checker({
-                // typescript: true, // Optional: will be enabled by default if `typescript` is installed
-                // vueTsc: true, // Optional: will be enabled by default if `vue-tsc` is installed
-                // biome: { // Optional: will be enabled by default if `@biomejs/biome` is installed
-                //   command: 'check', // You can also use `lint` or `format`
-                // },
-                // stylelint: { // Optional: will be enabled by default if `stylelint` is installed
-                //   lintCommand: 'stylelint "**/*.{css,scss,vue}"', // You can also use `stylelint --fix ...`
-                // },
-            }),
         ],
     }
 })

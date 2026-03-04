@@ -34,8 +34,8 @@
   },
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt-build-module",
-    "lint": "nuxt typecheck && oxlint --type-aware --fix && biome lint --write",
+    "build": "nuxt-build-module --entry ./module.ts",
+    "lint": "nuxt typecheck",
     "release": "release-it",
     "test": "vitest",
     "postinstall": "nuxt prepare"

@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   preset: 'bun',
 	compatibilityDate: "2025-12-17",
@@ -22,9 +24,10 @@ export default defineNuxtConfig({
 	},
 
 	typescript: {
-		// typeCheck: true
-		// strict: true
+		strict: true,
+		typeCheck: true,
 	},
+
 	vite: {
 		plugins: [
 			/*

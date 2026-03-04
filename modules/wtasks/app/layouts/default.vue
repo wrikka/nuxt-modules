@@ -16,19 +16,22 @@ const { state: contextMenuState, isOpen: isContextMenuOpen } = useContextMenu();
     <Toaster rich-colors position="top-right" />
 
     <!-- Sidebar -->
-    <aside
-      :class="[
-        'flex-shrink-0 border-r border-border p-4 flex flex-col transition-width duration-300',
-        isSidebarOpen ? 'w-64' : 'w-20',
-      ]"
+    <OrganismsSidebar
+      :items="[]"
+      :collapsible="true"
+      :collapsed="!isSidebarOpen"
+      class="flex-shrink-0"
+      @update:collapsed="toggleSidebar"
     >
-      <Sidebar />
-    </aside>
+      <template #default>
+        <Sidebar />
+      </template>
+    </OrganismsSidebar>
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
       <header class="p-4 lg:hidden">
-        <button ~/click="toggleSidebar" class="text-muted-foreground hover:text-foreground">
+        <button @click="toggleSidebar" class="text-muted-foreground hover:text-foreground">
           <Icon name="mdi:menu" size="24" />
         </button>
       </header>
@@ -42,19 +45,21 @@ const { state: contextMenuState, isOpen: isContextMenuOpen } = useContextMenu();
     <EditTaskModal v-else-if="modalState?.name === 'editTask' && modalState.task" :task="modalState.task" ~/close="closeModal" />
     <ListSettingsModal v-else-if="modalState?.name === 'listSettings' && modalState.list" :list="modalState.list" ~/close="closeModal" />
     <AddListModal v-else-if="modalState?.name === 'addList'" ~/close="closeModal" />
-    <ConfirmationDialog
+    <MoleculesConfirmDialog
       v-else-if="modalState?.name === 'deleteTask' && modalState.task"
       title="Delete Task"
       :message="`Are you sure you want to delete task #${modalState.task.id}? This action cannot be undone.`"
-      ~/cancel="closeModal"
-      ~/confirm="handleConfirm"
+      variant="danger"
+      @cancel="closeModal"
+      @confirm="handleConfirm"
     />
-    <ConfirmationDialog
+    <MoleculesConfirmDialog
       v-else-if="modalState?.name === 'deleteList' && modalState.list"
       title="Delete List"
       :message="`Are you sure you want to delete the list '${modalState.list.label}'? This will also delete all tasks within this list.`"
-      ~/cancel="closeModal"
-      ~/confirm="handleConfirm"
+      variant="danger"
+      @cancel="closeModal"
+      @confirm="handleConfirm"
     />
     <ContextMenu
       v-if="contextMenuState"

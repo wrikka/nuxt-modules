@@ -6,8 +6,8 @@ const { groupedTasks, isLoading } = useTaskLists();
 
 <template>
   <div class="flex flex-wrap gap-4">
-    <LoadingIndicator v-if="isLoading" />
-    <EmptyState
+    <AtomsSpinner v-if="isLoading" class="w-8 h-8 mx-auto block" />
+    <AtomsEmpty
       v-else-if="Object.keys(groupedTasks).length === 0"
       title="No tasks found"
       message="Get started by creating a new task."

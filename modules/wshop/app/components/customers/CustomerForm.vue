@@ -29,53 +29,54 @@ const cancel = () => {
       <div class="space-y-3">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ *</label>
-          <input
+          <AtomsInput
             v-model="newCustomer.firstName"
             type="text"
             required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            placeholder="ชื่อ"
           />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">นามสกุล *</label>
-          <input
+          <AtomsInput
             v-model="newCustomer.lastName"
             type="text"
             required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            placeholder="นามสกุล"
           />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
-          <input
+          <AtomsInput
             v-model="newCustomer.email"
             type="email"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            placeholder="email@example.com"
           />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์</label>
-          <input
+          <AtomsInput
             v-model="newCustomer.phone"
             type="tel"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            placeholder="0XX-XXX-XXXX"
           />
         </div>
       </div>
       <div class="flex space-x-2 mt-3">
-        <button
-          type="button"
+        <AtomsButton
+          variant="ghost"
+          class="flex-1"
           @click="cancel"
-          class="flex-1 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
         >
           ยกเลิก
-        </button>
-        <button
-          type="submit"
-          class="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+        </AtomsButton>
+        <AtomsButton
+          variant="default"
+          class="flex-1"
+          @click="saveCustomer"
         >
           เพิ่ม
-        </button>
+        </AtomsButton>
       </div>
     </form>
   </div>

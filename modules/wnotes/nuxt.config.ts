@@ -1,9 +1,9 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   preset: 'bun',
   compatibilityDate: '2025-12-17',
   devtools: { enabled: true },
-
   modules: [
     '@vue-macros/nuxt',
     '@nuxtjs/color-mode',
@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-mcp-dev'
   ],
-
   nitro: {
     preset: 'cloudflare_module',
     cloudflare: {
@@ -20,36 +19,20 @@ export default defineNuxtConfig({
       nodeCompat: true,
     },
   },
-
   typescript: {
-    //typeCheck: true,
-    //strict: true
+    strict: true,
+    typeCheck: true,
   },
-
   sourcemap: {
     server: false,
     client: false,
   },
-
   vite: {
     server: {
       hmr: {
         port: 24679,
       },
     },
-    plugins: [
-      /*
-            checker({
-                overlay: {
-                    initialIsOpen: false,
-                },
-                //typescript: true,
-                //vueTsc: true,
-                //oxlint: true,
-                biome: {
-                    command: 'check',
-                },
-            }),*/
-    ],
+    plugins: [],
   },
 })

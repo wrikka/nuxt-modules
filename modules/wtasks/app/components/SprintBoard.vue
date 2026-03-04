@@ -118,42 +118,38 @@ onMounted(() => {
 		</div>
 
 		<!-- Create Sprint Modal -->
-		<BaseModal v-if="showCreateModal" title="Create New Sprint" @close="showCreateModal = false">
+		<MoleculesDialog v-if="showCreateModal" @close="showCreateModal = false">
+			<template #header>
+				<h3 class="text-lg font-semibold">Create New Sprint</h3>
+			</template>
 			<div class="space-y-4">
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sprint Name</label>
+					<label class="block text-sm font-medium mb-1">Sprint Name</label>
 					<input
 						v-model="newSprintName"
 						type="text"
-						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+						class="w-full px-3 py-2 border rounded-lg bg-background"
 						placeholder="e.g., Sprint 1"
 					>
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sprint Goal</label>
+					<label class="block text-sm font-medium mb-1">Sprint Goal</label>
 					<textarea
 						v-model="newSprintGoal"
-						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+						class="w-full px-3 py-2 border rounded-lg bg-background"
 						rows="3"
 						placeholder="What do we want to achieve in this sprint?"
 					/>
 				</div>
-				<div class="flex justify-end gap-3">
-					<button
-						class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
-						@click="showCreateModal = false"
-					>
-						Cancel
-					</button>
-					<button
-						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-						:disabled="!newSprintName"
-						@click="handleCreateSprint"
-					>
-						Create
-					</button>
-				</div>
 			</div>
-		</BaseModal>
+			<template #footer>
+				<AtomsButton variant="ghost" @click="showCreateModal = false">
+					Cancel
+				</AtomsButton>
+				<AtomsButton :disabled="!newSprintName" @click="handleCreateSprint">
+					Create
+				</AtomsButton>
+			</template>
+		</MoleculesDialog>
 	</div>
 </template>

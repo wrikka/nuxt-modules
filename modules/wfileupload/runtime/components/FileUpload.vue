@@ -32,14 +32,21 @@
         <!-- Modal Body -->
         <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           <!-- Tab Navigation -->
-          <TabNavigation :tabs="_tabs" :active-tab="activeTab" @tab-change="handleTabChange" />
+          <TabNavigation :tabs="availableTabs" :active-tab="activeTab" @tab-change="handleTabChange" />
 
           <!-- Tab Content -->
-          <div class="tab-content">
+          <div class="tab-content mt-4">
             <UploadArea v-if="activeTab === 'computer'" ref="uploadArea" :files="files" :config="config" @add-files="addFiles" @remove-file="_removeFile" @clear-files="clearFiles" @trigger-select="_triggerFileSelect" @reorder-files="handleReorderFiles" />
             <GitHubUpload v-if="activeTab === 'github'" @add-files="addFilesFromTab" />
             <OneDriveUpload v-if="activeTab === 'onedrive'" @add-files="addFilesFromTab" />
             <GoogleDrive v-if="activeTab === 'googledrive'" @add-files="addFilesFromTab" />
+            <DropboxUpload v-if="activeTab === 'dropbox'" @add-files="addFilesFromTab" />
+            <BoxUpload v-if="activeTab === 'box'" @add-files="addFilesFromTab" />
+            <S3Upload v-if="activeTab === 's3'" @add-files="addFilesFromTab" />
+            <AzureUpload v-if="activeTab === 'azure'" @add-files="addFilesFromTab" />
+            <WebcamCapture v-if="activeTab === 'webcam'" @capture="handleWebcamCapture" />
+            <ScreenRecorder v-if="activeTab === 'screen'" @capture="handleScreenCapture" />
+            <URLImport v-if="activeTab === 'url'" @import="handleURLImport" />
           </div>
         </div>
 
@@ -71,6 +78,14 @@ import GitHubUpload from './GitHubUpload.vue'
 import OneDriveUpload from './OneDriveUpload.vue'
 import GoogleDrive from './GoogleDrive.vue'
 import TabNavigation from './TabNavigation.vue'
+// Feature 4, 12-14: New cloud sources and capture components
+import DropboxUpload from './DropboxUpload.vue'
+import BoxUpload from './BoxUpload.vue'
+import S3Upload from './S3Upload.vue'
+import AzureUpload from './AzureUpload.vue'
+import WebcamCapture from './WebcamCapture.vue'
+import ScreenRecorder from './ScreenRecorder.vue'
+import URLImport from './URLImport.vue'
 
 const props = defineProps<{
   modelValue?: boolean
@@ -91,13 +106,39 @@ const internalIsOpen = ref(false)
 const uploadArea = ref()
 const activeTab = ref('computer')
 
-// Tab management
-const _tabs = ref([
-  { id: 'computer', label: 'Computer' },
-  { id: 'github', label: 'GitHub' },
-  { id: 'onedrive', label: 'OneDrive' },
-  { id: 'googledrive', label: 'Google Drive' }
-])
+// All available tabs - Feature 4, 12-14: Cloud sources, Webcam, Screen, URL
+const allTabs = [
+  { id: 'computer', label: 'คอมพิวเตอร์', icon: 'mdi:laptop' },
+  { id: 'github', label: 'GitHub', icon: 'mdi:github' },
+  { id: 'onedrive', label: 'OneDrive', icon: 'mdi:microsoft-onedrive' },
+  { id: 'googledrive', label: 'Google Drive', icon: 'mdi:google-drive' },
+  { id: 'dropbox', label: 'Dropbox', icon: 'mdi:dropbox' },
+  { id: 'box', label: 'Box', icon: 'mdi:package-variant-closed' },
+  { id: 's3', label: 'S3 Storage', icon: 'mdi:amazon-aws' },
+  { id: 'azure', label: 'Azure Blob', icon: 'mdi:microsoft-azure' },
+  { id: 'webcam', label: 'กล้อง', icon: 'mdi:camera' },
+  { id: 'screen', label: 'บันทึกหน้าจอ', icon: 'mdi:monitor-share' },
+  { id: 'url', label: 'จาก URL', icon: 'mdi:link' }
+]
+
+// Get enabled tabs from runtime config
+const runtimeConfig = useRuntimeConfig()
+const enabledSources = computed(() => {
+  return runtimeConfig.public.wfileupload?.cloudSources || ['github', 'googledrive', 'onedrive']
+})
+
+const availableTabs = computed(() => {
+  return allTabs.filter(tab => {
+    if (tab.id === 'computer') return true
+    if (['github', 'googledrive', 'onedrive', 'dropbox', 'box', 's3', 'azure'].includes(tab.id)) {
+      return enabledSources.value.includes(tab.id) && runtimeConfig.public.wfileupload?.enableCloudSources !== false
+    }
+    if (tab.id === 'webcam') return runtimeConfig.public.wfileupload?.enableWebcamCapture !== false
+    if (tab.id === 'screen') return runtimeConfig.public.wfileupload?.enableScreenRecording !== false
+    if (tab.id === 'url') return runtimeConfig.public.wfileupload?.enableURLImport !== false
+    return true
+  })
+})
 
 // Modal state
 const isOpen = computed({
@@ -121,6 +162,21 @@ const addFiles = (fileList: FileList | File[]) => {
 
 const addFilesFromTab = (fileList: FileList | File[]) => {
   addFiles(fileList)
+}
+
+// Feature 12: Webcam capture handler
+const handleWebcamCapture = (file: File) => {
+  addFiles([file])
+}
+
+// Feature 13: Screen recording handler
+const handleScreenCapture = (file: File) => {
+  addFiles([file])
+}
+
+// Feature 14: URL import handler
+const handleURLImport = (files: File[]) => {
+  addFiles(files)
 }
 
 const handleTabChange = (tabId: string) => {

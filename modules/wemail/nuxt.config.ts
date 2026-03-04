@@ -1,55 +1,44 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   preset: 'bun',
   app: {
     pageTransition: { name: 'page', mode: 'out-in' }
   },
-	compatibilityDate: "2025-12-17", 
-	devtools: { enabled: true },
-	modules: [
-        "@vue-macros/nuxt",
-        "@nuxtjs/color-mode",
-        "@vueuse/nuxt",
-        "@unocss/nuxt",
-        "@pinia/nuxt",
-        "nuxt-mcp-dev",
-        "@nuxt/icon"
-    ],
+  compatibilityDate: "2025-12-17", 
+  devtools: { enabled: true },
+  modules: [
+    "@vue-macros/nuxt",
+    "@nuxtjs/color-mode",
+    "@vueuse/nuxt",
+    "@unocss/nuxt",
+    "@pinia/nuxt",
+    "nuxt-mcp-dev",
+    "@nuxt/icon"
+  ],
 
-    icon: {
-        serverBundle: {
-        collections: ['mdi'] 
-        }
+  icon: {
+    serverBundle: {
+      collections: ['mdi'] 
+    }
+  },
+
+  nitro : {
+    preset: "cloudflare_module",
+    routeRules: {
+      '/**': { cors: true },
     },
-
-    nitro : {
-        preset: "cloudflare_module",
-        routeRules: {
-            '/**': { cors: true },
-        },
-        cloudflare: {
-            deployConfig: true,
-            nodeCompat: true,
-        },
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
     },
+  },
 
-	typescript: {
-		// typeCheck: true
-		// strict: true
-	},
-	vite : {
-        plugins: [
-            /*
-            checker({
-                overlay: {
-                    initialIsOpen: false,
-                },
-                //typescript: true,
-                //vueTsc: true,
-                //oxlint: true,
-                biome: {
-                    command: 'check',
-                },
-            }),*/
-        ],
-	}
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
+  vite: {
+    plugins: [],
+  }
 });

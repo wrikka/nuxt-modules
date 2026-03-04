@@ -1,0 +1,66 @@
+{
+  "name": "@wrikka/waudio",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Audio Editor Module for Nuxt - Waveform editing with effects and mixing",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wrikka/nuxt-modules",
+    "directory": "modules/waudio"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt-module",
+    "audio",
+    "editor",
+    "waveform",
+    "effects"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt-build-module",
+    "lint": "nuxt typecheck",
+    "release": "release-it",
+    "test": "vitest",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@nuxt/icon": "^2.2.1",
+    "@pinia/nuxt": "^0.11.3",
+    "@vueuse/core": "^14.2.1",
+    "@vueuse/nuxt": "^14.2.1",
+    "howler": "^2.2.4",
+    "lamejs": "^1.2.1",
+    "nuxt": "^4.3.1",
+    "pinia": "^3.0.4",
+    "tone": "^15.5.3",
+    "vue": "^3.5.29",
+    "vue-router": "^5.0.3",
+    "wavesurfer.js": "^7.12.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.2",
+    "@types/wavesurfer.js": "^6.0.12",
+    "@unocss/nuxt": "^66.6.2",
+    "typescript": "^5.9.3",
+    "unocss": "^66.6.2",
+    "vue-tsc": "^3.2.5"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
+  }
+}

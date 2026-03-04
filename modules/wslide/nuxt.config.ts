@@ -6,6 +6,10 @@ const config: NuxtConfig = {
 	compatibilityDate: "2025-02-19",
 	devtools: { enabled: false },
 	modules: ["./module/slide/module", "@unocss/nuxt"],
+	typescript: {
+		strict: true,
+		typeCheck: true,
+	},
 	vite: {
 		define: {
 			global: 'globalThis',

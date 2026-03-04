@@ -148,7 +148,10 @@ const handleAddWidget = (type: typeof availableWidgets[0]["type"]) => {
 		</div>
 
 		<!-- Widget Selector Modal -->
-		<BaseModal v-if="showWidgetSelector" title="Add Widget" @close="showWidgetSelector = false">
+		<MoleculesDialog v-if="showWidgetSelector" @close="showWidgetSelector = false">
+			<template #header>
+				<h3 class="text-lg font-semibold">Add Widget</h3>
+			</template>
 			<div class="grid grid-cols-2 gap-3">
 				<button
 					v-for="widget in availableWidgets"
@@ -160,6 +163,6 @@ const handleAddWidget = (type: typeof availableWidgets[0]["type"]) => {
 					<span class="text-sm font-medium">{{ widget.title }}</span>
 				</button>
 			</div>
-		</BaseModal>
+		</MoleculesDialog>
 	</div>
 </template>

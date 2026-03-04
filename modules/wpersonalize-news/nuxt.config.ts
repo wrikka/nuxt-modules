@@ -1,6 +1,10 @@
-import checker from 'vite-plugin-checker';
+import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
+  typescript: {
+    strict: true,
+    typeCheck: true,
+  },
   preset: 'bun',
   compatibilityDate: 'latest',
   devtools: { enabled: true },
@@ -50,16 +54,5 @@ export default defineNuxtConfig({
     },
   },
 
-  vite: {
-    plugins: [
-      checker({
-        overlay: {
-          initialIsOpen: false,
-        },
-        typescript: true,
-        vueTsc: true,
-        oxlint: true,
-      }),
-    ],
-  },
+
 });

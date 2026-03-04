@@ -38,20 +38,20 @@ useHead({
     </div>
 
     <div v-if="isLoading">
-      <LoadingIndicator />
+      <AtomsSpinner class="w-8 h-8 mx-auto" />
     </div>
     <div v-else-if="searchTerm && filteredTasks.length > 0">
       <TaskList title="Search Results" :tasks="filteredTasks" />
     </div>
     <div v-else-if="searchTerm && filteredTasks.length === 0">
-      <EmptyState
+      <AtomsEmpty
         title="No tasks found"
         :message="`No tasks found matching your search for '${searchTerm}'.`"
         icon="mdi:magnify"
       />
     </div>
     <div v-else>
-       <EmptyState
+       <AtomsEmpty
         title="Search for tasks"
         message="Enter a search term above to find tasks by their title."
         icon="mdi:magnify"

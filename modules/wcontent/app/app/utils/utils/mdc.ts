@@ -1,4 +1,4 @@
-import { marked } from "marked";
+import { parseMarkdown, type Token } from "@wrikka/wmarkdown/runtime/utils/parser";
 
 export interface MDCNode {
 	type: "element" | "text" | "component";
@@ -9,8 +9,8 @@ export interface MDCNode {
 }
 
 export function parseMDC(markdown: string): MDCNode[] {
-	// Parse markdown to tokens
-	const tokens = marked.lexer(markdown);
+	// Parse markdown to tokens using wmarkdown
+	const tokens = parseMarkdown(markdown);
 	const nodes: MDCNode[] = [];
 
 	for (const token of tokens) {
@@ -18,43 +18,46 @@ export function parseMDC(markdown: string): MDCNode[] {
 			nodes.push({
 				type: "element",
 				tag: "p",
-				children: parseInline(token.text || ""),
+				children: parseInline(token.content || ""),
 			});
 		} else if (token.type === "heading") {
+			const level = (token.props?.level as number) || 1;
 			nodes.push({
 				type: "element",
-				tag: `h${token.depth}`,
-				children: parseInline(token.text || ""),
+				tag: `h${level}`,
+				children: parseInline(token.content || ""),
 			});
-		} else if (token.type === "code") {
+		} else if (token.type === "codeblock") {
 			nodes.push({
 				type: "element",
 				tag: "pre",
 				children: [{
 					type: "element",
 					tag: "code",
-					props: { class: `language-${token.lang || "text"}` },
+					props: { class: `language-${(token.props?.lang as string) || "text"}` },
 					children: [{
 						type: "text",
-						content: token.text || "",
+						content: token.content || "",
 					}],
 				}],
 			});
 		} else if (token.type === "list") {
+			const isOrdered = token.props?.ordered as boolean;
+			const items = token.children || [];
 			nodes.push({
 				type: "element",
-				tag: token.ordered ? "ol" : "ul",
-				children: (token.items || []).map((item: any) => ({
-					type: "element",
+				tag: isOrdered ? "ol" : "ul",
+				children: items.map((item: Token) => ({
+					type: "element" as const,
 					tag: "li",
-					children: parseInline(item.text || ""),
+					children: parseInline(item.content || ""),
 				})),
 			});
 		} else if (token.type === "blockquote") {
 			nodes.push({
 				type: "element",
 				tag: "blockquote",
-				children: parseInline(token.text || ""),
+				children: parseInline(token.content || ""),
 			});
 		}
 	}

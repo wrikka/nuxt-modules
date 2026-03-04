@@ -96,23 +96,26 @@ onMounted(() => {
 		</div>
 
 		<!-- Rule Builder Modal -->
-		<BaseModal v-if="isRuleBuilderOpen" title="Create Automation Rule" @close="closeRuleBuilder">
+		<MoleculesDialog v-if="isRuleBuilderOpen" @close="closeRuleBuilder">
+			<template #header>
+				<h3 class="text-lg font-semibold">Create Automation Rule</h3>
+			</template>
 			<div class="space-y-4">
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rule Name</label>
+					<label class="block text-sm font-medium mb-1">Rule Name</label>
 					<input
 						v-model="newRule.name"
 						type="text"
-						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+						class="w-full px-3 py-2 border rounded-lg bg-background"
 						placeholder="e.g., Notify on task completion"
 					>
 				</div>
 
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trigger</label>
+					<label class="block text-sm font-medium mb-1">Trigger</label>
 					<select
 						v-model="newRule.trigger.type"
-						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+						class="w-full px-3 py-2 border rounded-lg bg-background"
 					>
 						<option value="status_change">Status Changes</option>
 						<option value="task_created">Task Created</option>
@@ -122,10 +125,10 @@ onMounted(() => {
 				</div>
 
 				<div>
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Action</label>
+					<label class="block text-sm font-medium mb-1">Action</label>
 					<select
 						v-model="newRule.actions[0].type"
-						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
+						class="w-full px-3 py-2 border rounded-lg bg-background"
 					>
 						<option value="send_notification">Send Notification</option>
 						<option value="change_status">Change Status</option>
@@ -133,23 +136,15 @@ onMounted(() => {
 						<option value="add_tag">Add Tag</option>
 					</select>
 				</div>
-
-				<div class="flex justify-end gap-3 pt-4">
-					<button
-						class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
-						@click="closeRuleBuilder"
-					>
-						Cancel
-					</button>
-					<button
-						class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-						:disabled="!newRule.name"
-						@click="handleCreateRule"
-					>
-						Create Rule
-					</button>
-				</div>
 			</div>
-		</BaseModal>
+			<template #footer>
+				<AtomsButton variant="ghost" @click="closeRuleBuilder">
+					Cancel
+				</AtomsButton>
+				<AtomsButton :disabled="!newRule.name" @click="handleCreateRule">
+					Create Rule
+				</AtomsButton>
+			</template>
+		</MoleculesDialog>
 	</div>
 </template>

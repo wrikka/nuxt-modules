@@ -34,3 +34,9 @@ export * from './customer';
 export * from './checkout-session';
 export * from './product';
 export * from './composables';
+
+// Unified Payment API types
+export * from './unified-payment';
+
+// Gateway Adapter types
+export * from './gateway-adapter';

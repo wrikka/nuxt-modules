@@ -21,8 +21,8 @@
     "scan": "bunx sg scan -r",
     "check:modules": "bunx node-modules-inspector",
     "lint": "turbo lint",
-    "test": "vitest",
-    "build": "nuxt-build-module",
+    "test": "turbo test",
+    "build": "turbo lint",
     "verify": "turbo lint && turbo test && turbo build",
     "devtools": "turbo devtools",
     "release": "release-it"

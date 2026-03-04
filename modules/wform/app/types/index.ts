@@ -209,3 +209,5 @@ export interface UseFormConditionalReturn {
   };
   createCondition: (field: string, operator: ConditionOperator, value: FieldValue) => FieldCondition;
 }
+
+export * from './builder';

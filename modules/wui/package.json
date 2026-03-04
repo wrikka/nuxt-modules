@@ -21,12 +21,11 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./components": "./src/components/index.ts",
-    "./lib": "./src/lib/index.ts"
+    "./components": "./src/runtime/components/index.ts",
+    "./runtime/*": "./src/runtime/*"
   },
   "files": [
-    "src",
-    "runtime"
+    "src"
   ],
   "main": "./src/index.ts",
   "name": "@wrikka/wui",

@@ -7,9 +7,9 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 
 	typescript: {
-		strict: true,
-		typeCheck: true,
-	},
+    strict: true,
+    typeCheck: true,
+  },
 
 	vite: {
 		plugins: [

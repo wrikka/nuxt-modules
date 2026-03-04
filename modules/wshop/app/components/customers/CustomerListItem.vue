@@ -20,10 +20,11 @@ const select = (customer: Customer) => {
     class="p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
   >
     <div class="flex items-center">
-      <img 
-        :src="customer.avatar || '/default-avatar.png'" 
+      <AtomsAvatar
+        :src="customer.avatar || '/default-avatar.png'"
         :alt="customer.firstName"
-        class="w-10 h-10 rounded-full mr-3"
+        size="md"
+        class="mr-3"
       />
       <div>
         <div class="font-medium">

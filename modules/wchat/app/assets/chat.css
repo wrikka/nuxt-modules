@@ -1,0 +1,454 @@
+/* WChat Module Styles - Telegram-like Design */
+
+/* CSS Variables */
+:root {
+  --wchat-sidebar-width: 320px;
+  --wchat-header-height: 64px;
+  --wchat-input-height: auto;
+  --wchat-bubble-radius: 12px;
+  --wchat-avatar-size: 48px;
+}
+
+/* Chat Layout */
+.wchat-layout {
+  display: grid;
+  grid-template-columns: var(--wchat-sidebar-width) 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Message Bubbles */
+.wchat-bubble {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: var(--wchat-bubble-radius);
+  position: relative;
+  word-wrap: break-word;
+}
+
+.wchat-bubble--own {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+}
+
+.wchat-bubble--other {
+  background: var(--surface);
+  color: var(--foreground);
+  border-bottom-left-radius: 4px;
+}
+
+.wchat-bubble--secret {
+  border: 2px solid var(--destructive);
+}
+
+.wchat-bubble--forwarded {
+  border-left: 3px solid var(--primary);
+  padding-left: 9px;
+}
+
+/* Message Status Icons */
+.wchat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.wchat-status--sent {
+  color: var(--muted-foreground);
+}
+
+.wchat-status--delivered {
+  color: var(--primary);
+}
+
+.wchat-status--read {
+  color: var(--success);
+}
+
+/* Chat List Item */
+.wchat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wchat-list-item:hover {
+  background-color: var(--accent);
+}
+
+.wchat-list-item--active {
+  background-color: var(--accent);
+}
+
+.wchat-list-item--muted {
+  opacity: 0.7;
+}
+
+.wchat-list-item--pinned {
+  position: relative;
+}
+
+.wchat-list-item--pinned::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* Unread Badge */
+.wchat-unread {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wchat-unread--muted {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* Online Indicator */
+.wchat-online {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid var(--background);
+}
+
+/* Typing Indicator */
+.wchat-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wchat-typing__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: wchat-typing 1.4s infinite ease-in-out both;
+}
+
+.wchat-typing__dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.wchat-typing__dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes wchat-typing {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Reactions */
+.wchat-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.wchat-reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wchat-reaction:hover {
+  background: var(--accent);
+}
+
+.wchat-reaction--active {
+  background: var(--primary-20);
+}
+
+/* Call Interface */
+.wchat-call {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.wchat-call__video {
+  flex: 1;
+  position: relative;
+  background: #000;
+}
+
+.wchat-call__video--local {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 160px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.wchat-call__controls {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+.wchat-call__control {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.wchat-call__control--mute {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.wchat-call__control--mute.active {
+  background: #ef4444;
+}
+
+.wchat-call__control--end {
+  background: #ef4444;
+  color: white;
+}
+
+/* Sticker Panel */
+.wchat-stickers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 12px;
+}
+
+.wchat-sticker {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.wchat-sticker:hover {
+  transform: scale(1.05);
+}
+
+/* Poll */
+.wchat-poll {
+  background: var(--surface);
+  border-radius: var(--wchat-bubble-radius);
+  padding: 12px;
+  margin: 4px 0;
+}
+
+.wchat-poll__option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wchat-poll__option::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--primary-20);
+  width: var(--vote-percentage, 0%);
+  transition: width 0.3s ease;
+}
+
+.wchat-poll__option:hover {
+  background: var(--accent);
+}
+
+/* Media Preview */
+.wchat-media {
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.wchat-media--image {
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.wchat-media--video {
+  max-height: 300px;
+}
+
+.wchat-media--file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+/* File Upload Progress */
+.wchat-upload {
+  position: relative;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+.wchat-upload__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* Chat Folders */
+.wchat-folders {
+  display: flex;
+  overflow-x: auto;
+  padding: 8px;
+  gap: 8px;
+  scrollbar-width: none;
+}
+
+.wchat-folders::-webkit-scrollbar {
+  display: none;
+}
+
+.wchat-folder {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+.wchat-folder:hover {
+  background: var(--accent);
+}
+
+.wchat-folder--active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Search Results */
+.wchat-search {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background);
+  z-index: 10;
+}
+
+.wchat-search__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wchat-search__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+/* Self-destruct Timer */
+.wchat-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wchat-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wchat-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .wchat-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .wchat-bubble {
+    max-width: 85%;
+  }
+}

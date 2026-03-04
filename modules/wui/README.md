@@ -1,11 +1,11 @@
-# @wrikka/wdesign
+# @wrikka/wui
 
-Design system with UnoCSS and Vue components for consistent UI across applications.
+UI Component Library with UnoCSS and Vue components for consistent design across applications.
 
 ## Installation
 
 ```bash
-bun add @wrikka/wdesign
+bun add @wrikka/wui
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ Add to your `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: ['@wrikka/wdesign']
+  modules: ['@wrikka/wui']
 })
 ```
 
@@ -25,6 +25,12 @@ Then use the components in your templates:
   <WButton>Click me</WButton>
 </template>
 ```
+
+## Structure
+
+- `src/runtime/components/` - Vue components (atoms, molecules, organisms)
+- `src/runtime/layouts/` - Layout components
+- `docs/app/` - Documentation app
 
 ## License
 
